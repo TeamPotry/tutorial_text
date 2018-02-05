@@ -1,4 +1,5 @@
 #include <sourcemod>
+#include <stocksoup_tf_annotations>
 
 public Plugin myinfo =
 {
