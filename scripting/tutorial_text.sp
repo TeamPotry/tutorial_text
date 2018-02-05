@@ -10,7 +10,7 @@ public Plugin myinfo =
 	url = "https://github.com/TeamPotry/tutorial_text"
 };
 
-void OnPluginStart()
+public void OnPluginStart()
 {
     return;
 }
