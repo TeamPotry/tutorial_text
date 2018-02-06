@@ -76,6 +76,7 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
           GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
           GetConfigValue(infoBuf, "text", message, sizeof(message), langId);
 
+          TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
       }
     }
 }
