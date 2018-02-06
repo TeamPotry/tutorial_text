@@ -1,0 +1,7 @@
+"Phrases"
+{
+    "menu_cached_id_meassage_title"
+    {
+        "ko"        "출력할 텍스트 선택"
+    }
+}

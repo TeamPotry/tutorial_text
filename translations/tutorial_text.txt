@@ -1,0 +1,7 @@
+"Phrases"
+{
+    "menu_cached_id_meassage_title"
+    {
+        "en"        "Select text"
+    }
+}
