@@ -1,5 +1,8 @@
 #include <sourcemod>
-#include <stocksoup_tf_annotations>
+#include <stocksoup/tf/annotations>
+
+#include "tutorial_text/commands.sp"
+#include "tutorial_text/stocks.sp"
 
 public Plugin myinfo =
 {
@@ -12,5 +15,5 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    return;
+	RegAdminCmd("testtext", Cmd_TestTest, ADMFLAG_GENERIC);
 }
