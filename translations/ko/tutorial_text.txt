@@ -1,7 +1,12 @@
 "Phrases"
 {
-    "menu_cached_id_meassage_title"
+    "menu_cached_id_message_title"
     {
         "ko"        "출력할 텍스트 선택"
+    }
+
+    "menu_cached_id_message_error"
+    {
+        "ko"        "오류: 구성 파일을 읽는 도중 문제가 발생하였습니다."
     }
 }

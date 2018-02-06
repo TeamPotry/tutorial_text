@@ -1,7 +1,12 @@
 "Phrases"
 {
-    "menu_cached_id_meassage_title"
+    "menu_cached_id_message_title"
     {
         "en"        "Select text"
+    }
+
+    "menu_cached_id_message_error"
+    {
+        "en"        "ERROR: Got problem during reading config."
     }
 }
