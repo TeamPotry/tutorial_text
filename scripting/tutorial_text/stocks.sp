@@ -46,7 +46,7 @@ public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buff
     return true;
 }
 
-//
+/////////////////////////////////////////////////////////////////////////////////
 
 stock bool IsValidClient(int client, bool replaycheck=true)
 {
