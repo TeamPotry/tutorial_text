@@ -36,7 +36,7 @@ public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buff
         if(!kv.JumpToKey(languageId))
         {
             LogError("[TT] not found languageId in ''%s'' ''%s''", achievementId, languageId);
-            return false;
+            // 이 경우에는 그냥 영어로 변경.
         }
     }
 

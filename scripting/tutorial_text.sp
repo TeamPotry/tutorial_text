@@ -3,6 +3,7 @@
 
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
+#include "tutorial_text/menu.sp"
 
 public Plugin myinfo =
 {
