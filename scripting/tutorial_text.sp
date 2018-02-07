@@ -17,4 +17,6 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	RegAdminCmd("testtext", Cmd_TestTest, ADMFLAG_GENERIC);
+
+	LoadTranslations("tutorial_text");
 }
