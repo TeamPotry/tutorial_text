@@ -1,3 +1,28 @@
+TFAnnotationEvent LoadMessageID(char[] meassageId)
+{
+    char values[PLATFORM_MAX_PATH];
+    TFAnnotationEvent annotation = new TFAnnotationEvent();
+
+    GetConfigValue(meassageId, "show_effect", values, sizeof(values));
+    annotation.ShowEffect = StringToInt(values) > 0 ? true : false;
+
+    GetConfigValue(meassageId, "show_distance", values, sizeof(values));
+    annotation.ShowDistance = StringToInt(values) > 0 ? true : false;
+
+    GetConfigValue(meassageId, "id", values, sizeof(values));
+    annotation.ID = StringToInt(values);
+
+    GetConfigValue(meassageId, "play_sound", values, sizeof(values));
+    annotation.SetSound(values);
+
+    GetConfigValue(meassageId, "text", values, sizeof(values));
+    annotation.SetText(values);
+
+    return annotation;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
 #define PLUGIN_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
 
 public bool ImportConfigKeyValues(KeyValues victim)
