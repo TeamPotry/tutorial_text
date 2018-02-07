@@ -7,10 +7,7 @@ void DisplayTextMenu(int client)
     Menu menu = new Menu(OnSelectTextMenu);
     KeyValues kv = GetConfigKeyValues();
 
-    char langId[4];
     char message[128];
-    GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
-
     menu.SetTitle("%t", "menu_cached_id_message_title");
 
     if(kv == null)
@@ -28,7 +25,7 @@ void DisplayTextMenu(int client)
             do
             {
                 kv.GetSectionName(temp, sizeof(temp));
-                GetConfigValue(temp, "text", message, sizeof(message), langId);
+                GetConfigValue(temp, "text", message, sizeof(message), client);
                 menu.AddItem(temp, message);
             }
             while(kv.GotoNextKey());
@@ -57,7 +54,7 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
           menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
           GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
-          GetConfigValue(infoBuf, "text", message, sizeof(message), langId);
+          GetConfigValue(infoBuf, "text", message, sizeof(message), client);
 
           TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
       }
