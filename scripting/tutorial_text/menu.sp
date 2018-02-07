@@ -40,24 +40,6 @@ void DisplayTextMenu(int client)
     SetGlobalTransTarget(LANG_SERVER);
 }
 
-/*
-ex)
-
-"tutorial_text"
-{
-    "testmessageId"
-    {
-        "text"  "ho!"
-
-        "ko"
-        {
-            "text"  "호!"
-        }
-    }
-}
-
-*/
-
 ////////////////////////////////////////////////////////////////////////////////
 
 public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
