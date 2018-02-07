@@ -19,9 +19,11 @@ stock KeyValues GetConfigKeyValues()
 }
 
 /*
+    Default languageId is English.
+
     return = false: 오류, value 변동 없음
 */
-public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, char languageId[4] = "en")
+public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, char[] languageId)
 {
     KeyValues kv = GetConfigKeyValues();
 
@@ -31,7 +33,7 @@ public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buff
         return false;
     }
 
-    if(!StrEqual(languageId, "en")) // 영어가 아닌 타국어일 경우
+    if(!StrEqual(languageId, "")) //
     {
         if(!kv.JumpToKey(languageId))
         {
