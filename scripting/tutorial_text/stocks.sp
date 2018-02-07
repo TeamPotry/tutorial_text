@@ -23,7 +23,7 @@ stock KeyValues GetConfigKeyValues()
 
     return = false: 오류, value 변동 없음
 */
-public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, int client = 0)
+stock bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, int client = 0)
 {
     KeyValues kv = GetConfigKeyValues();
 
@@ -44,7 +44,7 @@ public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buff
     {
         if(!kv.JumpToKey(langId))
         {
-            LogError("[TT] not found languageId in ''%s'' ''%s''", meassageId, languageId);
+            LogError("[TT] not found languageId in ''%s'' ''%s''", meassageId, langId);
             // 이 경우에는 그냥 영어로 변경.
         }
     }
