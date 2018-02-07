@@ -13,7 +13,7 @@ void DisplayTextMenu(int client)
     if(!ImportConfigKeyValues(kv))
     {
         Format(message, sizeof(message), "%t", "menu_cached_id_message_error");
-        menu.AddItem("The error text.", message);
+        menu.AddItem("The error text.", message, ITEMDRAW_DISABLED);
     }
     else
     {
