@@ -8,20 +8,21 @@ void DisplayTextMenu(int client)
     KeyValues kv = GetConfigKeyValues();
 
     char langId[4];
+    char message[128];
     GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
 
     menu.SetTitle("%t", "menu_cached_id_message_title");
 
     if(kv == null)
     {
-        menu.AddItem("The error text.", "%t", "menu_cached_id_message_error");
+        Format(message, sizeof(message), "%t", "menu_cached_id_message_error");
+        menu.AddItem("The error text.", message);
     }
     else
     {
         char temp[64];
-        char message[128];
-        kv.Rewind();
 
+        kv.Rewind();
         if(kv.GotoFirstSubKey())
         {
             do

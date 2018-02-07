@@ -21,13 +21,13 @@ stock KeyValues GetConfigKeyValues()
 /*
     return = false: 오류, value 변동 없음
 */
-public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, char[] languageId = "en")
+public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, char languageId[4] = "en")
 {
     KeyValues kv = GetConfigKeyValues();
 
-    if(!kv.JumpToKey(achievementId))
+    if(!kv.JumpToKey(meassageId))
     {
-        LogError("[TT] not found achievementId in config ''%s''", achievementId);
+        LogError("[TT] not found achievementId in config ''%s''", meassageId);
         return false;
     }
 
@@ -35,7 +35,7 @@ public bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buff
     {
         if(!kv.JumpToKey(languageId))
         {
-            LogError("[TT] not found languageId in ''%s'' ''%s''", achievementId, languageId);
+            LogError("[TT] not found languageId in ''%s'' ''%s''", meassageId, languageId);
             // 이 경우에는 그냥 영어로 변경.
         }
     }
