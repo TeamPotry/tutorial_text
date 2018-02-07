@@ -1,21 +1,22 @@
 #define PLUGIN_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
 
-stock KeyValues GetConfigKeyValues()
+public bool ImportConfigKeyValues(KeyValues victim)
 {
     char config[PLATFORM_MAX_PATH];
     BuildPath(Path_SM, config, sizeof(config), PLUGIN_CONFIG_FILE_PATH);
 
     KeyValues configKv = new KeyValues("tutorial_text");
 
-    if(!FileExists(config) && !configKv.ImportFromFile(config))
+    if(!FileExists(config) || !configKv.ImportFromFile(config))
     {
         SetFailState("[TT] \"%s\" is broken?!", PLUGIN_CONFIG_FILE_PATH); // 플러그인 정지
-        return null;
+        return false;
     }
 
     configKv.Rewind();
+    victim.Import(configKv);
 
-    return configKv;
+    return true;
 }
 
 /*
@@ -25,7 +26,8 @@ stock KeyValues GetConfigKeyValues()
 */
 stock bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, int client = 0)
 {
-    KeyValues kv = GetConfigKeyValues();
+    KeyValues kv = new KeyValues("tutorial_text");
+    ImportConfigKeyValues(kv);
 
     char langId[4];
     if(IsValidClient(client))

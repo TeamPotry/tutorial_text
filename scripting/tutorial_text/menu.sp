@@ -5,12 +5,12 @@ void DisplayTextMenu(int client)
 {
     SetGlobalTransTarget(client);
     Menu menu = new Menu(OnSelectTextMenu);
-    KeyValues kv = GetConfigKeyValues();
+    KeyValues kv = new KeyValues("tutorial_text");
 
     char message[128];
     menu.SetTitle("%t", "menu_cached_id_message_title");
 
-    if(kv == null)
+    if(!ImportConfigKeyValues(kv))
     {
         Format(message, sizeof(message), "%t", "menu_cached_id_message_error");
         menu.AddItem("The error text.", message);
