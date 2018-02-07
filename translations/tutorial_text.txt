@@ -9,4 +9,10 @@
     {
         "en"        "ERROR: Got problem during reading config."
     }
+
+    "sound_not_found"
+    {
+        "#Format"   "{1:s}"
+        "en"        "ERROR: Sound file ''{1}'' not found."
+    }
 }

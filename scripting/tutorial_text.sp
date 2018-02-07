@@ -20,3 +20,45 @@ public void OnPluginStart()
 
 	LoadTranslations("tutorial_text");
 }
+
+public void OnMapStart()
+{
+	// 사운드 캐시
+
+	PrecacheAllTextSound();
+}
+
+void PrecacheAllTextSound()
+{
+	KeyValues kv = new KeyValues("tutorial_text");
+
+	if(!ImportConfigKeyValues(kv))
+    {
+        LogError("%t", "menu_cached_id_message_error");
+		return;
+    }
+
+	char meassageId[64];
+	char path[PLATFORM_MAX_PATH];
+	char soundPath[PLATFORM_MAX_PATH];
+	kv.Rewind();
+
+	if(kv.GotoFirstSubKey())
+	{
+		do
+		{
+			kv.GetSectionName(meassageId, sizeof(meassageId));
+			GetConfigValue(meassageId, "play_sound", soundPath, sizeof(soundPath));
+
+			Format(path, sizeof(path), "sound/%s", soundPath);
+			if(!FileExists(path)) {
+				LogError("%t", "sound_not_found");
+				continue;
+			}
+
+			if(!IsSoundPrecached(soundPath))
+				PrecacheSound(soundPath);
+		}
+		while(kv.GotoNextKey());
+	}
+}
