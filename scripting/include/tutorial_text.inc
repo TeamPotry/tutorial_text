@@ -15,4 +15,5 @@ enum TestTextPositionType
 {
     Type_FollowClient = 0, // Follow client who called menu.
     Type_FollowAim, // Seeing spot
+	Type_FollowAimTarget // follow entity in client's seeing spot.
 };
