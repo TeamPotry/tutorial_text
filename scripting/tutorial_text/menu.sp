@@ -50,10 +50,9 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
         }
         case MenuAction_Select:
         {
-            char infoBuf[64], message[128], langId[4];
+            char infoBuf[64], message[128];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
             GetConfigValue(infoBuf, "text", message, sizeof(message), client);
 
             // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
