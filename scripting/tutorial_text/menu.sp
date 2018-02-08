@@ -40,7 +40,37 @@ void DisplayTextMenu(int client)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
+// 딱히 메리트가 없어서 중단.
+
+/*
+void DisplayTextSettingMenu(int client, char[] meassageId)
+{
+    SetGlobalTransTarget(client);
+
+    Menu menu = new Menu(OnTextSettingMenu);
+    TFAnnotationEvent event = LoadMessageID(meassageId);
+
+    char message[128];
+    menu.SetTitle("%t", "menu_cached_id_message_setting_title");
+
+    Format(message, sizeof(message), "%t", "setting_show_text", "");
+    menu.AddItem("0", message); // view_as<TestTextDisplayType>(StringToInt(infoBuf)) == Type_ShowAll
+
+    Format(message, sizeof(message), "%t", "setting_follow_text", "");
+    menu.AddItem("0", message); // view_as<TestTextDisplayType>(StringToInt(infoBuf)) == Type_FollowClient
+
+    Format(message, sizeof(message), "%t", "setting_show_effect", event.ShowEffect ? "ON" : "OFF");
+    menu.AddItem("show_effect", message);
+
+    Format(message, sizeof(message), "%t", "setting_show_distance", event.ShowDistance ? "ON" : "OFF");
+    menu.AddItem("show_distance", message);
+
+
+
+    SetGlobalTransTarget(LANG_SERVER);
+}
+
+public int OnTextSettingMenu(Menu menu, MenuAction action, int client, int item)
 {
     switch(action)
     {
@@ -59,3 +89,4 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
         }
     }
 }
+*/

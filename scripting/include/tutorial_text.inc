@@ -4,6 +4,7 @@
 
 #define __tutotial_text_included
 
+/*
 
 enum TestTextDisplayType
 {
@@ -17,3 +18,5 @@ enum TestTextPositionType
     Type_FollowAim, // Seeing spot
 	Type_FollowAimTarget // follow entity in client's seeing spot.
 };
+
+*/
