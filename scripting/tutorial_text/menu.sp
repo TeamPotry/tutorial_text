@@ -38,6 +38,35 @@ void DisplayTextMenu(int client)
     SetGlobalTransTarget(LANG_SERVER);
 }
 
+public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
+{
+    switch(action)
+    {
+        case MenuAction_End:
+        {
+            menu.Close();
+        }
+        case MenuAction_Select:
+        {
+            char infoBuf[64], message[128]];
+            menu.GetItem(item, infoBuf, sizeof(infoBuf));
+
+            TFAnnotationEvent event = LoadMessageID(meassageId);
+
+            static float endPos[3];
+            GetClientEyeEndPos(client, endPos);
+
+            event.vecPosition(endPos);
+            annotation.Fire(annotation);
+
+            // DisplayTextSettingMenu(client, infoBuf); DECA
+            // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 // 딱히 메리트가 없어서 중단.

@@ -84,6 +84,22 @@ stock bool GetConfigValue(char[] messageId, char[] key, char[] value, int buffer
 
 /////////////////////////////////////////////////////////////////////////////////
 
+public void GetClientEyeEndPos(const int client, float endPos[3])
+{
+    static float startPos[3];
+    static float eyeAngles[3];
+
+    GetClientEyePosition(client, startPos);
+    GetClientEyeAngles(client, eyeAngles);
+    TR_TraceRayFilter(startPos, eyeAngles, MASK_PLAYERSOLID, RayType_Infinite, TraceAnything);
+    TR_GetEndPosition(endPos);
+}
+
+public bool TraceAnything(int entity, int contentsMask)
+{
+    return false;
+}
+
 stock bool IsValidClient(int client, bool replaycheck=true)
 {
 	if(client <= 0 || client > MaxClients)
