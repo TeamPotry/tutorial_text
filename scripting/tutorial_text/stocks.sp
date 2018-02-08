@@ -1,21 +1,21 @@
-TFAnnotationEvent LoadMessageID(char[] meassageId)
+TFAnnotationEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
     TFAnnotationEvent annotation = new TFAnnotationEvent();
 
-    GetConfigValue(meassageId, "show_effect", values, sizeof(values));
+    GetConfigValue(messageId, "show_effect", values, sizeof(values));
     annotation.ShowEffect = StringToInt(values) > 0 ? true : false;
 
-    GetConfigValue(meassageId, "show_distance", values, sizeof(values));
+    GetConfigValue(messageId, "show_distance", values, sizeof(values));
     annotation.ShowDistance = StringToInt(values) > 0 ? true : false;
 
-    GetConfigValue(meassageId, "id", values, sizeof(values));
+    GetConfigValue(messageId, "id", values, sizeof(values));
     annotation.ID = StringToInt(values);
 
-    GetConfigValue(meassageId, "play_sound", values, sizeof(values));
+    GetConfigValue(messageId, "play_sound", values, sizeof(values));
     annotation.SetSound(values);
 
-    GetConfigValue(meassageId, "text", values, sizeof(values));
+    GetConfigValue(messageId, "text", values, sizeof(values));
     annotation.SetText(values);
 
     return annotation;
@@ -49,7 +49,7 @@ public bool ImportConfigKeyValues(KeyValues victim)
 
     return = false: 오류, value 변동 없음
 */
-stock bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffer, int client = 0)
+stock bool GetConfigValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
 {
     KeyValues kv = new KeyValues("tutorial_text");
     ImportConfigKeyValues(kv);
@@ -61,9 +61,9 @@ stock bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffe
         Format(langId, sizeof(langId), "en");
 
 
-    if(!kv.JumpToKey(meassageId))
+    if(!kv.JumpToKey(messageId))
     {
-        LogError("[TT] not found meassageId in config ''%s''", meassageId);
+        LogError("[TT] not found messageId in config ''%s''", messageId);
         return false;
     }
 
@@ -71,7 +71,7 @@ stock bool GetConfigValue(char[] meassageId, char[] key, char[] value, int buffe
     {
         if(!kv.JumpToKey(langId))
         {
-            LogError("[TT] not found languageId in ''%s'' ''%s''", meassageId, langId);
+            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
             // 이 경우에는 그냥 영어로 변경.
         }
     }

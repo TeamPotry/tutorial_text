@@ -39,7 +39,7 @@ void PrecacheAllTextSound()
 		return;
     }
 
-	char meassageId[64];
+	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
 	kv.Rewind();
@@ -48,8 +48,8 @@ void PrecacheAllTextSound()
 	{
 		do
 		{
-			kv.GetSectionName(meassageId, sizeof(meassageId));
-			GetConfigValue(meassageId, "play_sound", soundPath, sizeof(soundPath));
+			kv.GetSectionName(messageId, sizeof(messageId));
+			GetConfigValue(messageId, "play_sound", soundPath, sizeof(soundPath));
 
 			Format(path, sizeof(path), "sound/%s", soundPath);
 			if(!FileExists(path)) {
