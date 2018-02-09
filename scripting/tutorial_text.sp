@@ -51,6 +51,8 @@ void PrecacheAllTextSound()
 			kv.GetSectionName(messageId, sizeof(messageId));
 			GetConfigValue(messageId, "play_sound", soundPath, sizeof(soundPath));
 
+			if(soundPath[0] == '\0') continue;
+
 			Format(path, sizeof(path), "sound/%s", soundPath);
 			if(!FileExists(path)) {
 				LogError("%t", "sound_not_found");
