@@ -1,4 +1,4 @@
-TFAnnotationEvent LoadMessageID(char[] messageId)
+stock TFAnnotationEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
     TFAnnotationEvent annotation = new TFAnnotationEvent();
