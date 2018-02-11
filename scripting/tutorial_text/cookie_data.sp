@@ -7,49 +7,49 @@ methodmap TTCookie < Handle {
 
 	public bool CheckRuleForClient(const int client)
 	{	// FIXME: OH MY GOD
-		char temp[80];
-		char exst[2][64]; // exst[1] is answer! wuaaaa
+        char temp[80];
+        char exst[2][64]; // exst[1] is answer! wuaaaa
         TTSettingCookie settingCookie = new TTSettingCookie();
-		ReadCookieIterator(this, temp, sizeof(temp), CookieAccess_Protected);
-		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
+        ReadCookieIterator(this, temp, sizeof(temp), CookieAccess_Protected);
+        ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
 
-		GetConfigValue(exst[1], "cookie_rule", temp, sizeof(temp));
-		ShowMessageCookieRule rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
+        GetConfigValue(exst[1], "cookie_rule", temp, sizeof(temp));
+        ShowMessageCookieRule rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
 
         GetClientCookie(client, this, temp, sizeof(temp));
         bool firstViewed = StringToInt(temp) > 0;
 
         bool viewSetting = settingCookie.GetClientTextViewSetting(client);
 
-		switch(rule)
-		{
-			case Type_Normal:
-			{
-				if(!viewSetting) {
+        switch(rule)
+        {
+            case Type_Normal:
+            {
+                if(!viewSetting)
+                {
                     if(!firstViewed)
                         return true;
                     return false;
                 }
-			}
+            }
 
-			case Type_OnlyOne:
-			{
+            case Type_OnlyOne:
+            {
                 if(firstViewed)
                     return true;
-
                 return false;
-			}
+            }
 
-			case Type_EveryTime:
-			{
+            case Type_EveryTime:
+            {
                 return true;
-			}
+            }
 
-			case Type_NormalEvenFirst:
-			{
+            case Type_NormalEvenFirst:
+            {
                 return viewSetting;
-			}
-		}
+            }
+        }
 
         return true;
 	}
