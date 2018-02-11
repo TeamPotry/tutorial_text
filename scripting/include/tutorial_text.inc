@@ -20,3 +20,11 @@ enum TestTextPositionType
 };
 
 */
+
+enum ShowMessageCookieRule
+{
+	Type_Normal = 0, // text is no longer ignore rules. (But first message is will ignore SETTING.)
+	Type_OnlyOne, // only show when first time. (SETTING ignored.)
+	Type_EveryTime, // if text following this rule, always show text. (SETTING ignored.)
+	Type_NormalEvenFirst // text is no longer ignore rules.
+};

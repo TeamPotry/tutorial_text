@@ -69,32 +69,19 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-// 딱히 메리트가 없어서 중단.
-
-/*
-void DisplayTextSettingMenu(int client, char[] meassageId)
+void DisplayTextSettingMenu(int client)
 {
     SetGlobalTransTarget(client);
 
     Menu menu = new Menu(OnTextSettingMenu);
-    TFAnnotationEvent event = LoadMessageID(meassageId);
+    TTSettingCookie settingCookie = new TTSettingCookie();
 
-    char message[128];
-    menu.SetTitle("%t", "menu_cached_id_message_setting_title");
+    menu.SetTitle("%t", "menu_cached_id_message_title");
 
-    Format(message, sizeof(message), "%t", "setting_show_text", "");
-    menu.AddItem("0", message); // view_as<TestTextDisplayType>(StringToInt(infoBuf)) == Type_ShowAll
+    menu.AddItem("", settingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
 
-    Format(message, sizeof(message), "%t", "setting_follow_text", "");
-    menu.AddItem("0", message); // view_as<TestTextDisplayType>(StringToInt(infoBuf)) == Type_FollowClient
-
-    Format(message, sizeof(message), "%t", "setting_show_effect", event.ShowEffect ? "ON" : "OFF");
-    menu.AddItem("show_effect", message);
-
-    Format(message, sizeof(message), "%t", "setting_show_distance", event.ShowDistance ? "ON" : "OFF");
-    menu.AddItem("show_distance", message);
-
-
+    menu.ExitButton = true;
+    menu.Display(client, MENU_TIME_FOREVER);
 
     SetGlobalTransTarget(LANG_SERVER);
 }
@@ -109,13 +96,12 @@ public int OnTextSettingMenu(Menu menu, MenuAction action, int client, int item)
         }
         case MenuAction_Select:
         {
-            char infoBuf[64], message[128];
-            menu.GetItem(item, infoBuf, sizeof(infoBuf));
+            TTSettingCookie settingCookie = new TTSettingCookie();
+            SetGlobalTransTarget(client);
 
-            GetConfigValue(infoBuf, "text", message, sizeof(message), client);
-
-            // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
+            settingCookie.SetClientTextViewSetting(client, !settingCookie.GetClientTextViewSetting(client));
+            CPrintToChat(client, "{seashell}[TT]{default} %t", "now_set_done", settingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
+            SetGlobalTransTarget(LANG_SERVER);
         }
     }
 }
-*/

@@ -21,6 +21,18 @@ stock TFAnnotationEvent LoadMessageID(char[] messageId)
     return annotation;
 }
 
+stock Handle FindCookieEx(const char[] cookieName)
+{
+    Handle cookieHandle = FindClientCookie(cookieName);
+    if(cookieHandle == null)
+    {
+        cookieHandle = RegClientCookie(cookieName, "", CookieAccess_Protected);
+    }
+
+    return cookieHandle;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 
 stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
 {

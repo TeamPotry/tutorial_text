@@ -1,4 +1,5 @@
 #include <sourcemod>
+#include <clientprefs>
 #include <stocksoup/tf/annotations>
 #include <tutorial_text>
 #include <morecolors>
@@ -6,6 +7,7 @@
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
 #include "tutorial_text/menu.sp"
+#include "tutorial_text/cookie_data.sp"
 
 public Plugin myinfo =
 {
@@ -19,6 +21,10 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	RegAdminCmd("testtext", Cmd_TestTest, ADMFLAG_GENERIC);
+	CreateConVar("tutotial_text_commands", "", "Commands for tutorial text setting menu.")
+
+	AddCommandListener(Listener_Say, "say");
+	AddCommandListener(Listener_Say, "say_team");
 
 	LoadTranslations("tutorial_text");
 }
