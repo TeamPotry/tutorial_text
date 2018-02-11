@@ -1,6 +1,7 @@
 #include <sourcemod>
 #include <stocksoup/tf/annotations>
 #include <tutorial_text>
+#include <morecolors>
 
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
