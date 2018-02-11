@@ -21,6 +21,15 @@ stock TFAnnotationEvent LoadMessageID(char[] messageId)
     return annotation;
 }
 
+
+stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
+{
+    ConVar cvar = FindConVar("tutotial_text_commands");
+    char commands[256];
+    cvar.GetString(commands, sizeof(commands));
+    return StrContains(cmd, commands) > -1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 
 #define PLUGIN_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
