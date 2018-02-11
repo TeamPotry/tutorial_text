@@ -28,6 +28,7 @@ public Action:Listener_Say(int client, const char[] command, int argc)
 
     if(IsConVarCommand("tutotial_text_commands", chat[1]))
     {
+        DisplayTextSettingMenu(client);
         return Plugin_Handled;
     }
     return Plugin_Continue;
