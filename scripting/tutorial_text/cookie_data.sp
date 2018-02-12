@@ -5,6 +5,20 @@ methodmap TTCookie < Handle {
 		return FindCookieEx(temp);
 	}
 
+	public bool GetClientViewed(const int client)
+	{
+		char temp[2];
+		GetClientCookie(client, this, temp, sizeof(temp));
+		return StringToInt(temp);
+	}
+
+	public void SetClientViewed(const int client, bool value)
+	{
+		char temp[2];
+		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
+		SetClientCookie(client, this, temp);
+	}
+
 	public bool CheckRuleForClient(const int client)
 	{	// FIXME: OH MY GOD
         char temp[80];
