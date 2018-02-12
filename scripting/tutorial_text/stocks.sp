@@ -1,7 +1,7 @@
 stock void FireTutorialText(TFAnnotationEvent event, const char[] messageId)
 {
     /*
-        This function will fire event. But using tutorial_text view setting.
+        This function will fire event after rule checking.
         And it will set Viewed Cookie.
     */
 
