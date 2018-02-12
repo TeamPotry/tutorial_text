@@ -8,6 +8,7 @@
 #include "tutorial_text/stocks.sp"
 #include "tutorial_text/menu.sp"
 #include "tutorial_text/cookie_data.sp"
+#include "tutorial_text/natives.sp"
 
 public Plugin myinfo =
 {
@@ -17,6 +18,11 @@ public Plugin myinfo =
 	version = "In Process",
 	url = "https://github.com/TeamPotry/tutorial_text"
 };
+
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
+{
+
+}
 
 public void OnPluginStart()
 {

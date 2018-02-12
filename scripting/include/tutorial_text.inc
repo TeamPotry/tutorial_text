@@ -28,3 +28,7 @@ enum ShowMessageCookieRule
 	Type_EveryTime, // if text following this rule, always show text. (SETTING ignored.)
 	Type_NormalEvenFirst // text is no longer ignore rules.
 };
+
+// native TT_LoadMessageID(const char[] messageId);
+
+// native TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId);
