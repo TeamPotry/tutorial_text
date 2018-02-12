@@ -1,3 +1,37 @@
+stock void FireTutorialText(TFAnnotationEvent event, const char[] messageId)
+{
+    /*
+        This function will fire event. But using tutorial_text view setting.
+        And it will set Viewed Cookie.
+    */
+
+    int clients[MAXPLAYERS+1];
+    int numClient = 0;
+    int visibilityBits = event.VisibilityBits;
+    TTCookie cookie = new TTCookie(messageId);
+
+    for(int loop = 0; loop <= MaxClients; loop++)
+    {
+        if(visibilityBits & (1 << loop))
+        {
+            clients[numClient++] = loop;
+        }
+    }
+
+    for(int loop = 0; loop < numClient; loop++)
+    {
+        if(!IsValidClient(clients[loop]) || !IsFakeClient(clients[loop]) || !cookie.CheckRuleForClient(clients[loop])) {
+            visibilityBits |= ~ (1 << loop);
+            event.VisibilityBits = visibilityBits;
+            continue;
+        }
+
+        SetClientViewed(clients[loop], true);
+    }
+
+    event.Fire(annotation);
+}
+
 stock TFAnnotationEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
