@@ -1,13 +1,13 @@
-stock void FireTutorialText(TFAnnotationEvent event, const char[] messageId)
+stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId)
 {
     /*
-        This function will fire event after rule checking.
+        This function will fire annotation after rule checking.
         And it will set Viewed Cookie.
     */
 
     int clients[MAXPLAYERS+1];
     int numClient = 0;
-    int visibilityBits = event.VisibilityBits;
+    int visibilityBits = annotation.VisibilityBits;
     TTCookie cookie = new TTCookie(messageId);
 
     for(int loop = 0; loop <= MaxClients; loop++)
@@ -22,14 +22,14 @@ stock void FireTutorialText(TFAnnotationEvent event, const char[] messageId)
     {
         if(!IsValidClient(clients[loop]) || !IsFakeClient(clients[loop]) || !cookie.CheckRuleForClient(clients[loop])) {
             visibilityBits |= ~ (1 << loop);
-            event.VisibilityBits = visibilityBits;
+            annotation.VisibilityBits = visibilityBits;
             continue;
         }
 
         SetClientViewed(clients[loop], true);
     }
 
-    event.Fire(annotation);
+    annotation.Fire(annotation);
 }
 
 stock TFAnnotationEvent LoadMessageID(char[] messageId)
