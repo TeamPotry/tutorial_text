@@ -32,3 +32,22 @@ enum ShowMessageCookieRule
 native TFAnnotationEvent TT_LoadMessageID(const char[] messageId);
 
 native void TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId);
+
+public SharedPlugin:__pl_TUTORIAL_TEXT=
+{
+	name="tutorial_text",
+	file="tutorial_text.smx",
+	#if defined REQUIRE_PLUGIN
+		required=1,
+	#else
+		required=0,
+	#endif
+};
+
+#if !defined REQUIRE_PLUGIN
+public __pl_TUTORIAL_TEXT_SetNTVOptional()
+{
+	MarkNativeAsOptional("TT_LoadMessageID");
+	MarkNativeAsOptional("TT_FireTutorialText");
+}
+#endif
