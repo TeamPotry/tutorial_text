@@ -29,6 +29,6 @@ enum ShowMessageCookieRule
 	Type_NormalEvenFirst // text is no longer ignore rules.
 };
 
-// native TT_LoadMessageID(const char[] messageId);
+native TFAnnotationEvent TT_LoadMessageID(const char[] messageId);
 
-// native TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId);
+native void TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId);
