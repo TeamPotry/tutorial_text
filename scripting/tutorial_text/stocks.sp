@@ -26,7 +26,7 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
             continue;
         }
 
-        SetClientViewed(clients[loop], true);
+        cookie.SetClientViewed(clients[loop], true);
     }
 
     annotation.Fire(annotation);
