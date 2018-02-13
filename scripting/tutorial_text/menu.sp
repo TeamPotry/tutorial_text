@@ -48,16 +48,16 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
         }
         case MenuAction_Select:
         {
-            char infoBuf[64], message[128]];
+            char infoBuf[64];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            TFAnnotationEvent event = LoadMessageID(meassageId);
+            TFAnnotationEvent event = LoadMessageID(infoBuf);
 
             static float endPos[3];
             GetClientEyeEndPos(client, endPos);
 
-            event.vecPosition(endPos);
-            annotation.Fire(annotation);
+            event.SetPosition(endPos);
+            event.Fire();
 
             // DisplayTextSettingMenu(client, infoBuf); DECA
             // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO

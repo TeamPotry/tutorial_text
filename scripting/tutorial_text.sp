@@ -3,6 +3,8 @@
 #include <stocksoup/tf/annotations>
 #include <tutorial_text>
 #include <morecolors>
+#include <sdktools>
+#include <sdkhooks>
 
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
@@ -48,7 +50,7 @@ void PrecacheAllTextSound()
 
 	if(!ImportConfigKeyValues(kv))
     {
-        LogError("%t", "menu_cached_id_message_error");
+		LogError("%t", "menu_cached_id_message_error");
 		return;
     }
 

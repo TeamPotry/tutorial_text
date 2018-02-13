@@ -29,82 +29,12 @@ enum ShowMessageCookieRule
 	Type_NormalEvenFirst // text is no longer ignore rules.
 };
 
-methodmap TTCookie < Handle {
-	public TTCookie(const char[] messageId) {
-		char temp[80];
-		Format(temp, sizeof(temp), "tutorial_text_id:%s", messageId);
-		return FindCookieEx(temp);
-	}
-
-	public bool GetClientViewed(const int client)
-	{
-		char temp[2];
-		GetClientCookie(client, this, temp, sizeof(temp));
-		return StringToInt(temp);
-	}
-
-	public void SetClientViewed(const int client, bool value)
-	{
-		char temp[2];
-		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
-		SetClientCookie(client, this, temp);
-	}
-
-	public bool CheckRuleForClient(const int client)
-	{	// FIXME: OH MY GOD
-        char temp[80];
-        char exst[2][64]; // exst[1] is answer! wuaaaa
-        TTSettingCookie settingCookie = new TTSettingCookie();
-        ReadCookieIterator(this, temp, sizeof(temp), CookieAccess_Protected);
-        ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
-
-        GetConfigValue(exst[1], "cookie_rule", temp, sizeof(temp));
-        ShowMessageCookieRule rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
-
-        GetClientCookie(client, this, temp, sizeof(temp));
-        bool firstViewed = StringToInt(temp) > 0;
-
-        bool viewSetting = settingCookie.GetClientTextViewSetting(client);
-
-        switch(rule)
-        {
-            case Type_Normal:
-            {
-                if(!viewSetting)
-                {
-                    if(!firstViewed)
-                        return true;
-                    return false;
-                }
-            }
-
-            case Type_OnlyOne:
-            {
-                if(firstViewed)
-                    return true;
-                return false;
-            }
-
-            case Type_EveryTime:
-            {
-                return true;
-            }
-
-            case Type_NormalEvenFirst:
-            {
-                return viewSetting;
-            }
-        }
-
-        return true;
-	}
-}
 
 methodmap TTSettingCookie < Handle {
 	public TTSettingCookie() {
 		char temp[40];
 		Format(temp, sizeof(temp), "tutorial_text_setting");
-		return FindCookieEx(temp);
+		return view_as<TTSettingCookie>(FindCookieEx(temp));
 	}
 
 	public bool GetClientTextViewSetting(const int client) {
@@ -122,6 +52,80 @@ methodmap TTSettingCookie < Handle {
 
 }
 
+methodmap TTCookie < Handle {
+	public TTCookie(const char[] messageId) {
+		char temp[80];
+		Format(temp, sizeof(temp), "tutorial_text_id:%s", messageId);
+		return view_as<TTCookie>(FindCookieEx(temp));
+	}
+
+	public bool GetClientViewed(const int client)
+	{
+		char temp[2];
+		GetClientCookie(client, this, temp, sizeof(temp));
+		return StringToInt(temp) > 0;
+	}
+
+	public void SetClientViewed(const int client, bool value)
+	{
+		char temp[2];
+		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
+		SetClientCookie(client, this, temp);
+	}
+
+	public bool CheckRuleForClient(const int client)
+	{	// FIXME: OH MY GOD
+		char temp[80];
+		char exst[2][64]; // exst[1] is answer! wuaaaa
+		TTSettingCookie settingCookie = new TTSettingCookie();
+		CookieAccess access;
+		ReadCookieIterator(this, temp, sizeof(temp), access); // FIXME: access is no needed.
+		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
+
+		if(access == CookieAccess_Private)
+			return false; // FIXME: access is no needed.
+
+		GetConfigValue(exst[1], "cookie_rule", temp, sizeof(temp));
+		ShowMessageCookieRule rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
+
+		GetClientCookie(client, this, temp, sizeof(temp));
+		bool firstViewed = StringToInt(temp) > 0;
+
+		bool viewSetting = settingCookie.GetClientTextViewSetting(client);
+
+		switch(rule)
+		{
+		    case Type_Normal:
+		    {
+		        if(!viewSetting)
+		        {
+		            if(!firstViewed)
+		                return true;
+		            return false;
+		        }
+		    }
+
+		    case Type_OnlyOne:
+		    {
+		        if(firstViewed)
+		            return true;
+		        return false;
+		    }
+
+		    case Type_EveryTime:
+		    {
+		        return true;
+		    }
+
+		    case Type_NormalEvenFirst:
+		    {
+		        return viewSetting;
+		    }
+		}
+
+		return true;
+	}
+}
 
 native TFAnnotationEvent TT_LoadMessageID(const char[] messageId);
 

@@ -29,33 +29,33 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
         cookie.SetClientViewed(clients[loop], true);
     }
 
-    annotation.Fire(annotation);
+    annotation.Fire();
 }
 
 stock TFAnnotationEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
-    TFAnnotationEvent annotation = new TFAnnotationEvent();
+    TFAnnotationEvent event = new TFAnnotationEvent();
 
     GetConfigValue(messageId, "show_effect", values, sizeof(values));
-    annotation.ShowEffect = StringToInt(values) > 0 ? true : false;
+    event.ShowEffect = StringToInt(values) > 0 ? true : false;
 
     GetConfigValue(messageId, "show_distance", values, sizeof(values));
-    annotation.ShowDistance = StringToInt(values) > 0 ? true : false;
+    event.ShowDistance = StringToInt(values) > 0 ? true : false;
 
     GetConfigValue(messageId, "id", values, sizeof(values));
-    annotation.ID = StringToInt(values);
+    event.ID = StringToInt(values);
 
     GetConfigValue(messageId, "play_sound", values, sizeof(values));
-    annotation.SetSound(values);
+    event.SetSound(values);
 
     GetConfigValue(messageId, "text", values, sizeof(values));
-    annotation.SetText(values);
+    event.SetText(values);
 
-    return annotation;
+    return event;
 }
 
-stock Handle FindCookieEx(const char[] cookieName)
+stock Handle FindCookieEx(char[] cookieName)
 {
     Handle cookieHandle = FindClientCookie(cookieName);
     if(cookieHandle == null)
