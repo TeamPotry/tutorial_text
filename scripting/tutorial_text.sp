@@ -7,7 +7,6 @@
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
 #include "tutorial_text/menu.sp"
-#include "tutorial_text/cookie_data.sp"
 #include "tutorial_text/natives.sp"
 
 public Plugin myinfo =
