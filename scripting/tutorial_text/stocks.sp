@@ -26,10 +26,20 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
             continue;
         }
 
+        // TODO: 리뷰
+        char message[128];
+        char langId[4];
+        GetLanguageInfo(GetClientLanguage(clients[loop]), langId, sizeof(langId))
+        TFAnnotationEvent copiedAnnotation = annotation.Clone();
+
+        copiedAnnotation.SetClientVisibility(clients[loop], true);
+        GetConfigValue(messageId, "text", message, sizeof(message), langId);
+
         cookie.SetClientViewed(clients[loop], true);
+        copiedAnnotation.Fire();
     }
 
-    annotation.Fire();
+    // annotation.Fire();
 }
 
 stock TFAnnotationEvent LoadMessageID(char[] messageId, const int client = 0)
