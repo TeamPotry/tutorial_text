@@ -51,7 +51,7 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
             char infoBuf[64];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            TFAnnotationEvent event = LoadMessageID(infoBuf);
+            TFAnnotationEvent event = LoadMessageID(infoBuf, client);
 
             static float endPos[3];
             GetClientEyeEndPos(client, endPos);

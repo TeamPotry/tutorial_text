@@ -32,7 +32,7 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
     annotation.Fire();
 }
 
-stock TFAnnotationEvent LoadMessageID(char[] messageId)
+stock TFAnnotationEvent LoadMessageID(char[] messageId, const int client = 0)
 {
     char values[PLATFORM_MAX_PATH];
     TFAnnotationEvent event = new TFAnnotationEvent();
@@ -49,7 +49,15 @@ stock TFAnnotationEvent LoadMessageID(char[] messageId)
     GetConfigValue(messageId, "play_sound", values, sizeof(values));
     event.SetSound(values);
 
-    GetConfigValue(messageId, "text", values, sizeof(values));
+    if(IsValidClient(client)) {
+        char languageId[4];
+        GetLanguageInfo(GetClientLanguage(client), languageId, sizeof(languageId));
+        GetConfigValue(messageId, "text", values, sizeof(values), languageId);
+    }
+    else {
+        GetConfigValue(messageId, "text", values, sizeof(values));
+    }
+
     event.SetText(values);
 
     return event;
