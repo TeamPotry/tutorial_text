@@ -100,6 +100,7 @@ public int OnTextSettingMenu(Menu menu, MenuAction action, int client, int item)
             SetGlobalTransTarget(client);
 
             settingCookie.SetClientTextViewSetting(client, !settingCookie.GetClientTextViewSetting(client));
+            CPrintToChat(client, "{orangered}[TT]{default} %t", "now_set_done", settingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
             SetGlobalTransTarget(LANG_SERVER);
         }
     }
