@@ -129,7 +129,7 @@ methodmap TTCookie < Handle {
 
 native TFAnnotationEvent TT_LoadMessageID(const char[] messageId, const int client = 0);
 
-native void TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId);
+native void TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId, bool setLanguage = false);
 
 public SharedPlugin:__pl_TUTORIAL_TEXT=
 {

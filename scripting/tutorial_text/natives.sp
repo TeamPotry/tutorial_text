@@ -9,5 +9,5 @@ public int Native_FireTutorialText(Handle plugin, int numParams)
 {
     char temp[64];
     GetNativeString(2, temp, sizeof(temp));
-    FireTutorialText(GetNativeCell(1), temp);
+    FireTutorialText(GetNativeCell(1), temp, GetNativeCell(3));
 }

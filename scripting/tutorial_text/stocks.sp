@@ -1,8 +1,11 @@
-stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId)
+stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId, bool setLanguage = false)
 {
     /*
         This function will fire annotation after rule checking.
         And it will set Viewed Cookie.
+
+        @param setLanguage 컨픽 내의 언어로 텍스트를 바꿉니다.
+        // NOTE: 컨픽에 해당 Id가 없다면 사용 금지.
     */
 
     int clients[MAXPLAYERS+1];
@@ -26,20 +29,25 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
             continue;
         }
 
-        // TODO: 리뷰
-        char message[128];
-        char langId[4];
-        GetLanguageInfo(GetClientLanguage(clients[loop]), langId, sizeof(langId))
-        TFAnnotationEvent copiedAnnotation = annotation.Clone();
-
-        copiedAnnotation.SetClientVisibility(clients[loop], true);
-        GetConfigValue(messageId, "text", message, sizeof(message), langId);
-
         cookie.SetClientViewed(clients[loop], true);
-        copiedAnnotation.Fire();
+
+        if(setLanguage)
+        {
+            // TODO: 리뷰
+            char message[128];
+            char langId[4];
+            GetLanguageInfo(GetClientLanguage(clients[loop]), langId, sizeof(langId))
+            TFAnnotationEvent copiedAnnotation = annotation.Clone();
+
+            copiedAnnotation.SetClientVisibility(clients[loop], true);
+            GetConfigValue(messageId, "text", message, sizeof(message), langId);
+
+            copiedAnnotation.Fire();
+        }
     }
 
-    // annotation.Fire();
+    if(!setLanguage)
+        annotation.Fire();
 }
 
 stock TFAnnotationEvent LoadMessageID(char[] messageId, const int client = 0)
