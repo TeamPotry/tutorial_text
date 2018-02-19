@@ -1,4 +1,4 @@
-stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId, bool setLanguage = false)
+stock void FireTutorialText(TFAnnotationEvent annotation, char[] messageId, bool setLanguage = false)
 {
     /*
         This function will fire annotation after rule checking.
@@ -35,12 +35,10 @@ stock void FireTutorialText(TFAnnotationEvent annotation, const char[] messageId
         {
             // TODO: 리뷰
             char message[128];
-            char langId[4];
-            GetLanguageInfo(GetClientLanguage(clients[loop]), langId, sizeof(langId))
-            TFAnnotationEvent copiedAnnotation = annotation.Clone();
+            TFAnnotationEvent copiedAnnotation = view_as<TFAnnotationEvent>(CloseHandle(annotation));
 
             copiedAnnotation.SetClientVisibility(clients[loop], true);
-            GetConfigValue(messageId, "text", message, sizeof(message), langId);
+            GetConfigValue(messageId, "text", message, sizeof(message), clients[loop]);
 
             copiedAnnotation.Fire();
         }
