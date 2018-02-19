@@ -35,7 +35,7 @@ stock void FireTutorialText(TFAnnotationEvent annotation, char[] messageId, bool
         {
             // TODO: 리뷰
             char message[128];
-            TFAnnotationEvent copiedAnnotation = view_as<TFAnnotationEvent>(CloseHandle(annotation));
+            TFAnnotationEvent copiedAnnotation = view_as<TFAnnotationEvent>(CloneHandle(annotation));
 
             copiedAnnotation.SetClientVisibility(clients[loop], true);
             GetConfigValue(messageId, "text", message, sizeof(message), clients[loop]);
