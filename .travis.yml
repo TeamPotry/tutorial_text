@@ -16,11 +16,11 @@ install:
     - wget --input-file=http://sourcemod.net/smdrop/$SMVERSION/sourcemod-latest-linux
     - tar -xzf $(cat sourcemod-latest-linux)
 before_script:
-    - cd scripting/
+    - cd addons/sourcemod/scripting/
     # - wget "https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc" -O include/updater.inc
 
     - chmod +x spcomp
-script: ./compile.sh tutorial_text.sp freak_fortress_2/*.sp
+script: ./compile.sh tutorial_text.sp
 
 # Notifications
 notifications:
