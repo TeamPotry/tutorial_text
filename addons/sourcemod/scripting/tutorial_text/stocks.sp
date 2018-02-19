@@ -66,9 +66,7 @@ stock TFAnnotationEvent LoadMessageID(char[] messageId, const int client = 0)
     event.SetSound(values);
 
     if(IsValidClient(client)) {
-        char languageId[4];
-        GetLanguageInfo(GetClientLanguage(client), languageId, sizeof(languageId));
-        GetConfigValue(messageId, "text", values, sizeof(values), languageId);
+        GetConfigValue(messageId, "text", values, sizeof(values), client);
     }
     else {
         GetConfigValue(messageId, "text", values, sizeof(values));
