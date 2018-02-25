@@ -118,6 +118,8 @@ public bool ImportConfigKeyValues(KeyValues victim)
     configKv.Rewind();
     victim.Import(configKv);
 
+    delete configKv;
+
     return true;
 }
 
