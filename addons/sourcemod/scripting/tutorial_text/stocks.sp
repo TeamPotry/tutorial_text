@@ -1,4 +1,4 @@
-stock void FireTutorialText(TFAnnotationEvent annotation, char[] messageId, bool setLanguage = false)
+stock void FireTutorialText(TTextEvent annotation, char[] messageId, bool setLanguage = false)
 {
     /*
         This function will fire annotation after rule checking.
@@ -35,7 +35,7 @@ stock void FireTutorialText(TFAnnotationEvent annotation, char[] messageId, bool
         {
             // TODO: 리뷰
             char message[128];
-            TFAnnotationEvent copiedAnnotation = view_as<TFAnnotationEvent>(CloneHandle(annotation));
+            TTextEvent copiedAnnotation = view_as<TTextEvent>(CloneHandle(annotation));
 
             copiedAnnotation.SetClientVisibility(clients[loop], true);
             GetConfigValue(messageId, "text", message, sizeof(message), clients[loop]);
@@ -48,10 +48,10 @@ stock void FireTutorialText(TFAnnotationEvent annotation, char[] messageId, bool
         annotation.Fire();
 }
 
-stock TFAnnotationEvent LoadMessageID(char[] messageId, const int client = 0)
+stock TTextEvent LoadMessageID(char[] messageId, const int client = 0)
 {
     char values[PLATFORM_MAX_PATH];
-    TFAnnotationEvent event = new TFAnnotationEvent();
+    TTextEvent event = new TTextEvent();
 
     GetConfigValue(messageId, "show_effect", values, sizeof(values));
     event.ShowEffect = StringToInt(values) > 0 ? true : false;
