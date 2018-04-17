@@ -21,6 +21,13 @@ enum TestTextPositionType
 
 */
 
+enum TextFireType
+{
+    FireType_Test = 0, // Fire from tutorial_text.sp test menu.
+    FireType_ConfigId, // Fire from ID in config file.
+	FireType_SubPlugin // Fire from another plugin using TT_FireTutorialText Function. (Can use Custom MEssageID.)
+};
+
 enum ShowMessageCookieRule
 {
 	Type_Normal = 0, // text is no longer ignore rules. (But first message is will ignore SETTING.)
@@ -132,9 +139,14 @@ methodmap TTextEvent < TFAnnotationEvent {
 		return view_as<TTextEvent>(new TFAnnotationEvent());
 	}
 }
+
+/*
+	Load
+
+*/
 native TTextEvent TT_LoadMessageID(const char[] messageId, const int client = 0);
 
-native void TT_FireTutorialText(TTEvent annotation, const char[] messageId, bool setLanguage = false);
+native void TT_FireTutorialText(TTextEvent annotation, const char[] messageId, bool setLanguage = false);
 
 public SharedPlugin __pl_TUTORIAL_TEXT=
 {
