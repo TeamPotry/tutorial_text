@@ -131,7 +131,7 @@ native TFAnnotationEvent TT_LoadMessageID(const char[] messageId, const int clie
 
 native void TT_FireTutorialText(TFAnnotationEvent annotation, const char[] messageId, bool setLanguage = false);
 
-public SharedPlugin:__pl_TUTORIAL_TEXT=
+public SharedPlugin __pl_TUTORIAL_TEXT=
 {
 	name="tutorial_text",
 	file="tutorial_text.smx",
