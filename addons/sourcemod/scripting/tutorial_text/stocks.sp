@@ -21,6 +21,7 @@ stock bool FireTutorialText(TTextEvent annotation, char[] messageId, const int c
     annotation.SetText(text);
 
     annotation.Fire();
+    return true;
 }
 
 stock TTextEvent LoadMessageID(char[] messageId)

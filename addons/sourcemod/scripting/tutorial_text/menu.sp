@@ -51,13 +51,13 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
             char infoBuf[64];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            TTextEvent event = LoadMessageID(infoBuf, client);
+            TTextEvent event = LoadMessageID(infoBuf);
 
             static float endPos[3];
             GetClientEyeEndPos(client, endPos);
 
             event.SetPosition(endPos);
-            event.Fire();
+            TT_FireTutorialText(event, messageId, client);
 
             // DisplayTextSettingMenu(client, infoBuf); DECA
             // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO
