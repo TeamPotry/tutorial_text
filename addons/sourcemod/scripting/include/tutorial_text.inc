@@ -141,12 +141,26 @@ methodmap TTextEvent < TFAnnotationEvent {
 }
 
 /*
-	Load
+	Load message text from id in config.
 
+	@param messageId ; First, This is event's Text.
+	@param client : if this value is not 0, will set language to client's language.
+
+	@return
 */
-native TTextEvent TT_LoadMessageID(const char[] messageId, const int client = 0);
+native TTextEvent TT_LoadMessageID(const char[] messageId);
 
-native void TT_FireTutorialText(TTextEvent annotation, const char[] messageId, bool setLanguage = false);
+/*
+	Fire message text.
+
+	@param annotation : Fire this!
+	@param messageId : Check Cookie rule for this. (NOT FOR TEXT).
+	@param client : if this value is not 0, will set language to client's language.
+
+	@return : true: Successful Fired
+			  false: Failed
+*/
+native bool TT_FireTutorialText(TTextEvent annotation, const char[] messageId, const int client);
 
 public SharedPlugin __pl_TUTORIAL_TEXT=
 {

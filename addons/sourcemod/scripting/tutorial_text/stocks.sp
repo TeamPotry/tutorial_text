@@ -1,54 +1,29 @@
-stock void FireTutorialText(TTextEvent annotation, char[] messageId, bool setLanguage = false)
+stock bool FireTutorialText(TTextEvent annotation, char[] messageId, const int client)
 {
     /*
         This function will fire annotation after rule checking.
         And it will set Viewed Cookie.
 
-        @param setLanguage 컨픽 내의 언어로 텍스트를 바꿉니다.
         // NOTE: 컨픽에 해당 Id가 없다면 사용 금지.
     */
-
-    int clients[MAXPLAYERS+1];
-    int numClient = 0;
-    int visibilityBits = annotation.VisibilityBits;
     TTCookie cookie = new TTCookie(messageId);
 
-    for(int loop = 0; loop <= MaxClients; loop++)
-    {
-        if(visibilityBits & (1 << loop))
-        {
-            clients[numClient++] = loop;
-        }
-    }
+    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
+        return false;
 
-    for(int loop = 0; loop < numClient; loop++)
-    {
-        if(!IsValidClient(clients[loop]) || !IsFakeClient(clients[loop]) || !cookie.CheckRuleForClient(clients[loop])) {
-            visibilityBits |= ~ (1 << loop);
-            annotation.VisibilityBits = visibilityBits;
-            continue;
-        }
+    annotation.VisibilityBits = (1 << client);
+    char text[128];
 
-        cookie.SetClientViewed(clients[loop], true);
+    annotation.GetText(text, sizeof(text));
+    cookie.SetClientViewed(client, true);
 
-        if(setLanguage)
-        {
-            // TODO: 리뷰
-            char message[128];
-            TTextEvent copiedAnnotation = view_as<TTextEvent>(CloneHandle(annotation));
+    GetConfigValue(text, "text", text, sizeof(text), client);
+    annotation.SetText(text);
 
-            copiedAnnotation.SetClientVisibility(clients[loop], true);
-            GetConfigValue(messageId, "text", message, sizeof(message), clients[loop]);
-
-            copiedAnnotation.Fire();
-        }
-    }
-
-    if(!setLanguage)
-        annotation.Fire();
+    annotation.Fire();
 }
 
-stock TTextEvent LoadMessageID(char[] messageId, const int client = 0)
+stock TTextEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
     TTextEvent event = new TTextEvent();
@@ -65,14 +40,7 @@ stock TTextEvent LoadMessageID(char[] messageId, const int client = 0)
     GetConfigValue(messageId, "play_sound", values, sizeof(values));
     event.SetSound(values);
 
-    if(IsValidClient(client)) {
-        GetConfigValue(messageId, "text", values, sizeof(values), client);
-    }
-    else {
-        GetConfigValue(messageId, "text", values, sizeof(values));
-    }
-
-    event.SetText(values);
+    event.SetText(messageId);
 
     return event;
 }
