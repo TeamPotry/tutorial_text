@@ -57,7 +57,7 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
             GetClientEyeEndPos(client, endPos);
 
             event.SetPosition(endPos);
-            TT_FireTutorialText(event, infoBuf, client);
+            FireTutorialText(event, infoBuf, client);
 
             // DisplayTextSettingMenu(client, infoBuf); DECA
             // TF2_ShowFollowingAnnotationToAll(client, message); // FIXME: TODO

@@ -12,13 +12,13 @@
 
     "sound_not_found"
     {
-        "#Format"   "{1:s}"
+        "#format"   "{1:s}"
         "ko"        "오류: 사운드 ''{1}''를 찾을 수 없습니다."
     }
 
     "now_set_done"
     {
-        "#Format"   "{1:s}"
+        "#format"   "{1:s}"
         "ko"        "텍스트 보기 설정: {1}"
     }
 

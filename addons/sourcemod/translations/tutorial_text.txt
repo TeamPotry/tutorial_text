@@ -12,13 +12,13 @@
 
     "sound_not_found"
     {
-        "#Format"   "{1:s}"
+        "#format"   "{1:s}"
         "en"        "ERROR: Sound file ''{1}'' not found."
     }
 
     "now_set_done"
     {
-        "#Format"   "{1:s}"
+        "#format"   "{1:s}"
         "en"        "TEXT VIEW SETTING is now: {1}"
     }
 
