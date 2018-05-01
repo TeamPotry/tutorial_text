@@ -69,7 +69,7 @@ stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
 
 /////////////////////////////////////////////////////////////////////////////////
 
-#define PLUGIN_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
+#define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
 
 public bool ImportConfigKeyValues(KeyValues victim)
 {
