@@ -81,6 +81,7 @@ public bool ImportTestConfigKeyValues(KeyValues victim)
     if(!FileExists(config) || !configKv.ImportFromFile(config))
     {
         SetFailState("[TT] \"%s\" is broken?!", PLUGIN_CONFIG_FILE_PATH); // 플러그인 정지
+        victim = null;
         return false;
     }
 
