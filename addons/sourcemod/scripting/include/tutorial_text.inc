@@ -134,41 +134,6 @@ methodmap TTCookie < Handle {
 	}
 }
 
-methodmap TTextEvent < TFAnnotationEvent {
-	public TTextEvent() {
-		return view_as<TTextEvent>(new TFAnnotationEvent());
-	}
-
-	public void ChangeTextLanguage(const char[] filename, const char[] messageId, const int client)
-	{
-		if(!IsClientInGame(client) || IsFakeClient(client)) return;
-
-		TTextKeyValue kv = new TTextKeyValue(filename);
-		char text[128];
-		kv.GetValue(messageId, "text", text, sizeof(text), client);
-
-		this.SetText(text);
-	}
-
-	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client)
-	{
-	    /*
-	        This function will fire annotation after rule checking.
-	        And it will set Viewed Cookie.
-	    */
-	    TTCookie cookie = new TTCookie(filename, messageId);
-
-	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
-	        return false;
-
-	    this.VisibilityBits = (1 << client);
-	    cookie.SetClientViewed(client, true);
-
-	    this.Fire();
-	    return true;
-	}
-}
-
 methodmap TTextKeyValue < KeyValues {
 	public TTextKeyValue(const char[] filename = "") {
 		TTextKeyValue kv = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
@@ -208,6 +173,41 @@ methodmap TTextKeyValue < KeyValues {
 
 	    this.GetString(key, value, buffer);
 
+	    return true;
+	}
+}
+
+methodmap TTextEvent < TFAnnotationEvent {
+	public TTextEvent() {
+		return view_as<TTextEvent>(new TFAnnotationEvent());
+	}
+
+	public void ChangeTextLanguage(const char[] filename, const char[] messageId, const int client)
+	{
+		if(!IsClientInGame(client) || IsFakeClient(client)) return;
+
+		TTextKeyValue kv = new TTextKeyValue(filename);
+		char text[128];
+		kv.GetValue(messageId, "text", text, sizeof(text), client);
+
+		this.SetText(text);
+	}
+
+	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client)
+	{
+	    /*
+	        This function will fire annotation after rule checking.
+	        And it will set Viewed Cookie.
+	    */
+	    TTCookie cookie = new TTCookie(filename, messageId);
+
+	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
+	        return false;
+
+	    this.VisibilityBits = (1 << client);
+	    cookie.SetClientViewed(client, true);
+
+	    this.Fire();
 	    return true;
 	}
 }
