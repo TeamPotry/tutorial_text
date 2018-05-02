@@ -93,17 +93,15 @@ void PrecacheTestConfig()
 void PrecacheAllText()
 {
 	KeyValues kv = new KeyValues("tutorial_text");
-
-	Handle dir = OpenDirectory(plugin);
-	FileType filetype;
-
 	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
 	char foldername[PLATFORM_MAX_PATH];
 	char filename[PLATFORM_MAX_PATH];
 
-	BuildPath(Path_SM, foldername, sizeof(foldername), "plugins/tutorial_text", foldername);
+	BuildPath(Path_SM, foldername, sizeof(foldername), "plugins/tutorial_text");
+	Handle dir = OpenDirectory(foldername);
+	FileType filetype;
 
 	while(ReadDirEntry(dir, filename, PLATFORM_MAX_PATH, filetype))
 	{

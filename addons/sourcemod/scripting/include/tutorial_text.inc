@@ -164,7 +164,7 @@ methodmap TTextKeyValue < KeyValues {
 
 	    if(!StrEqual(langId, "en"))
 	    {
-	        if(!kv.JumpToKey(langId))
+	        if(!this.JumpToKey(langId))
 	        {
 	            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
 	            // 이 경우에는 그냥 영어로 변경.
@@ -216,10 +216,11 @@ methodmap TTextEvent < TFAnnotationEvent {
 	Load message text from id in config.
 
 	@param filename : if this string is empty, this returns test config TTextKeyValue.
+	@param victim : Will be imported.
 
 	@return TTextKeyValue
 */
-native TTextKeyValue TT_LoadTutorialText(const char[] filename = "");
+native TTextKeyValue TT_LoadTutorialText(const char[] filename = "", TTextKeyValue victim);
 
 /*
 	Load message text from id in config.

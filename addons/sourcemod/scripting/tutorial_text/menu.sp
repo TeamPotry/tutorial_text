@@ -1,6 +1,3 @@
-/*
-    TODO: 디테일한 메세지 효과 설정
-*/
 void DisplayTextMenu(int client)
 {
     SetGlobalTransTarget(client);
