@@ -147,7 +147,7 @@ methodmap TTextKeyValue < KeyValues {
 		return kv;
 	}
 
-	public bool GetValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
+	public bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0)
 	{
 	    char langId[4];
 	    if(client > 0 && IsClientInGame(client))
