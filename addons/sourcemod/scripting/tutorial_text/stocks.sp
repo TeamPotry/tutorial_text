@@ -71,10 +71,10 @@ stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
 
 #define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
 
-public bool ImportConfigKeyValues(KeyValues victim)
+public bool ImportTestConfigKeyValues(KeyValues victim)
 {
     char config[PLATFORM_MAX_PATH];
-    BuildPath(Path_SM, config, sizeof(config), PLUGIN_CONFIG_FILE_PATH);
+    BuildPath(Path_SM, config, sizeof(config), PLUGIN_TEST_CONFIG_FILE_PATH);
 
     KeyValues configKv = new KeyValues("tutorial_text");
 
