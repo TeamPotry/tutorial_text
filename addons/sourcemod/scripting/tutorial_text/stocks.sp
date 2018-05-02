@@ -99,7 +99,7 @@ public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
 stock bool GetConfigValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
 {
     KeyValues kv = new KeyValues("tutorial_text");
-    ImportConfigKeyValues(kv);
+    ImportTestConfigKeyValues(kv);
 
     char langId[4];
     if(IsValidClient(client))

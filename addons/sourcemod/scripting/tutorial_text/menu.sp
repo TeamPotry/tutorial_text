@@ -7,7 +7,7 @@ void DisplayTextMenu(int client)
     char message[128];
     menu.SetTitle("%t", "menu_cached_id_message_title");
 
-    if(!ImportConfigKeyValues(kv))
+    if(!ImportTestConfigKeyValues(kv))
     {
         Format(message, sizeof(message), "%t", "menu_cached_id_message_error");
         menu.AddItem("The error text.", message, ITEMDRAW_DISABLED);
@@ -48,7 +48,7 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
             char infoBuf[64];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            TTextEvent event = LoadMessageID(infoBuf);
+            TTextEvent event = LoadMessageID("", infoBuf);
 
             static float endPos[3];
             GetClientEyeEndPos(client, endPos);

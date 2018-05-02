@@ -218,9 +218,9 @@ methodmap TTextEvent < TFAnnotationEvent {
 	@param filename : if this string is empty, this returns test config TTextKeyValue.
 	@param victim : Will be imported.
 
-	@return TTextKeyValue
+	@return false = Failed.
 */
-native TTextKeyValue TT_LoadTutorialText(const char[] filename = "", TTextKeyValue victim);
+native bool TT_LoadTutorialText(const char[] filename = "", TTextKeyValue victim);
 
 /*
 	Load message text from id in config.
