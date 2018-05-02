@@ -140,6 +140,49 @@ methodmap TTextEvent < TFAnnotationEvent {
 	}
 }
 
+methodmap TTextKeyValue < KeyValues {
+	public TTextKeyValue(const char[] filename = "") {
+		TTextKeyValue kv = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
+
+		char config[PLATFORM_MAX_PATH];
+		BuildPath(Path_SM, config, sizeof(config), "configs/tutorial_text/%s.cfg", filename);
+
+		if(!FileExists(config) || !kv.ImportFromFile(config))
+			return null;
+
+		return kv;
+	}
+
+	public bool GetValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
+	{
+	    char langId[4];
+	    if(IsClientInGame(client))
+	        GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
+	    else
+	        Format(langId, sizeof(langId), "en");
+
+
+	    if(!this.JumpToKey(messageId))
+	    {
+	        LogError("[TT] not found messageId in config ''%s''", messageId);
+	        return false;
+	    }
+
+	    if(!StrEqual(langId, "en"))
+	    {
+	        if(!kv.JumpToKey(langId))
+	        {
+	            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
+	            // 이 경우에는 그냥 영어로 변경.
+	        }
+	    }
+
+	    this.GetString(key, value, buffer);
+
+	    return true;
+	}
+}
+
 /*
 	Load message text from id in config.
 
