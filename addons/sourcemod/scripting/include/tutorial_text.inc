@@ -145,7 +145,7 @@ methodmap TTextKeyValue < KeyValues {
 		TTextKeyValue kv = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 
 		char config[PLATFORM_MAX_PATH];
-		BuildPath(Path_SM, config, sizeof(config), "configs/tutorial_text/%s.cfg", filename);
+		BuildPath(Path_SM, config, sizeof(config), "configs/tutorial_text/%s", filename);
 
 		if(!FileExists(config) || !kv.ImportFromFile(config))
 			return null;
@@ -156,7 +156,7 @@ methodmap TTextKeyValue < KeyValues {
 	public bool GetValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
 	{
 	    char langId[4];
-	    if(IsClientInGame(client))
+	    if(client > 0 && IsClientInGame(client))
 	        GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
 	    else
 	        Format(langId, sizeof(langId), "en");
