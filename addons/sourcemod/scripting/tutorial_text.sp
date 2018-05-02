@@ -107,7 +107,7 @@ void PrecacheAllText()
 
 	while(ReadDirEntry(dir, filename, PLATFORM_MAX_PATH, filetype))
 	{
-		if(filetype == FileType_File && StrContains(filename, ".cfg"))
+		if(filetype == FileType_File)
 		{
 			Format(path, sizeof(path), "%s/%s", foldername, filename);
 			if(!kv.ImportFromFile(path)) continue;
