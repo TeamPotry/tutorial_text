@@ -215,18 +215,21 @@ methodmap TTextKeyValue < KeyValues {
 /*
 	Load message text from id in config.
 
+	@param filename : if this string is empty, this returns test config TTextKeyValue.
+
+	@return TTextKeyValue
+*/
+native TTextKeyValue TT_LoadTutorialText(const char[] filename = "");
+
+/*
+	Load message text from id in config.
+
 	@param messageId ; First, This is event's Text.
 	@param client : if this value is not 0, will set language to client's language.
 
 	@return
 */
-native TTextEvent TT_LoadMessageID(const char[] messageId);
-
-/*
-
-	@param client : if this value is not 0, will set language to client's language.
-
-*/
+native TTextEvent TT_LoadMessageID(const char[] filename, const char[] messageId);
 
 public SharedPlugin __pl_TUTORIAL_TEXT=
 {

@@ -1,18 +1,20 @@
-stock TTextEvent LoadMessageID(char[] messageId)
+stock TTextEvent LoadMessageID(char[] filename, char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
+    TTextKeyValue kv;
     TTextEvent event = new TTextEvent();
+    LoadTutorialText(filename, kv);
 
-    GetConfigValue(messageId, "show_effect", values, sizeof(values));
+    kv.GetValue(messageId, "show_effect", values, sizeof(values));
     event.ShowEffect = StringToInt(values) > 0 ? true : false;
 
-    GetConfigValue(messageId, "show_distance", values, sizeof(values));
+    kv.GetValue(messageId, "show_distance", values, sizeof(values));
     event.ShowDistance = StringToInt(values) > 0 ? true : false;
 
-    GetConfigValue(messageId, "id", values, sizeof(values));
+    kv.GetValue(messageId, "id", values, sizeof(values));
     event.ID = StringToInt(values);
 
-    GetConfigValue(messageId, "play_sound", values, sizeof(values));
+    kv.GetValue(messageId, "play_sound", values, sizeof(values));
     event.SetSound(values);
 
     event.SetText(messageId);
@@ -63,6 +65,28 @@ public bool ImportTestConfigKeyValues(KeyValues victim)
     victim.Import(configKv);
 
     delete configKv;
+
+    return true;
+}
+
+public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
+{
+    TTextKeyValue temp;
+
+    if(filename[0] != '\0')
+    {
+        temp = GetTextKeyValues(filename);
+    }
+    else
+    {
+        ImportTestConfigKeyValues(temp);
+    }
+
+    if(temp == null)
+        return false;
+
+    victim.Import(temp);
+    delete temp;
 
     return true;
 }
