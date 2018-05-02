@@ -60,9 +60,9 @@ methodmap TTSettingCookie < Handle {
 }
 
 methodmap TTCookie < Handle {
-	public TTCookie(const char[] messageId) {
+	public TTCookie(const char[] filename, const char[] messageId) {
 		char temp[80];
-		Format(temp, sizeof(temp), "tutorial_text_id:%s", messageId);
+		Format(temp, sizeof(temp), "tutorial_text_id:%s_%s", filename, messageId);
 		return view_as<TTCookie>(FindCookieEx(temp));
 	}
 
