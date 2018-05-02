@@ -25,7 +25,6 @@ StringMap g_hLoadedMap = null;
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	CreateNative("TT_LoadMessageID", Native_LoadMessageID);
-	CreateNative("TT_FireTutorialText", Native_FireTutorialText);
 }
 
 public void OnPluginStart()

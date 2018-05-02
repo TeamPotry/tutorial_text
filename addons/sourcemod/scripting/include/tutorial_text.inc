@@ -138,6 +138,35 @@ methodmap TTextEvent < TFAnnotationEvent {
 	public TTextEvent() {
 		return view_as<TTextEvent>(new TFAnnotationEvent());
 	}
+
+	public void ChangeTextLanguage(const char[] filename, const char[] messageId, const int client)
+	{
+		if(!IsClientInGame(client) || IsFakeClient(client)) return;
+
+		TTextKeyValue kv = new TTextKeyValue(filename);
+		char text[128];
+		kv.GetValue(messageId, "text", text, sizeof(text), client);
+
+		this.SetText(text);
+	}
+
+	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client)
+	{
+	    /*
+	        This function will fire annotation after rule checking.
+	        And it will set Viewed Cookie.
+	    */
+	    TTCookie cookie = new TTCookie(filename, messageId);
+
+	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
+	        return false;
+
+	    this.VisibilityBits = (1 << client);
+	    cookie.SetClientViewed(client, true);
+
+	    this.Fire();
+	    return true;
+	}
 }
 
 methodmap TTextKeyValue < KeyValues {
@@ -194,16 +223,10 @@ methodmap TTextKeyValue < KeyValues {
 native TTextEvent TT_LoadMessageID(const char[] messageId);
 
 /*
-	Fire message text.
 
-	@param annotation : Fire this!
-	@param messageId : Check Cookie rule for this. (NOT FOR TEXT).
 	@param client : if this value is not 0, will set language to client's language.
 
-	@return : true: Successful Fired
-			  false: Failed
 */
-native bool TT_FireTutorialText(TTextEvent annotation, const char[] messageId, const int client);
 
 public SharedPlugin __pl_TUTORIAL_TEXT=
 {

@@ -1,29 +1,3 @@
-stock bool FireTutorialText(TTextEvent annotation, char[] messageId, const int client)
-{
-    /*
-        This function will fire annotation after rule checking.
-        And it will set Viewed Cookie.
-
-        // NOTE: 컨픽에 해당 Id가 없다면 사용 금지.
-    */
-    TTCookie cookie = new TTCookie(messageId);
-
-    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
-        return false;
-
-    annotation.VisibilityBits = (1 << client);
-    char text[128];
-
-    annotation.GetText(text, sizeof(text));
-    cookie.SetClientViewed(client, true);
-
-    GetConfigValue(text, "text", text, sizeof(text), client);
-    annotation.SetText(text);
-
-    annotation.Fire();
-    return true;
-}
-
 stock TTextEvent LoadMessageID(char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
