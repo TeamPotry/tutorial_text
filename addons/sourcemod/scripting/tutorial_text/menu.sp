@@ -2,7 +2,7 @@ void DisplayTextMenu(int client)
 {
     SetGlobalTransTarget(client);
     Menu menu = new Menu(OnSelectTextMenu);
-    KeyValues kv = new KeyValues("tutorial_text");
+    TTextKeyValue kv;
 
     char message[128];
     menu.SetTitle("%t", "menu_cached_id_message_title");
@@ -22,7 +22,7 @@ void DisplayTextMenu(int client)
             do
             {
                 kv.GetSectionName(temp, sizeof(temp));
-                GetConfigValue(temp, "text", message, sizeof(message), client);
+                kv.GetValue(temp, "text", message, sizeof(message), client);
                 menu.AddItem(temp, message);
             }
             while(kv.GotoNextKey());

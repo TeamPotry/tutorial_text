@@ -1,6 +1,4 @@
 #include <sourcemod>
-#include <clientprefs>
-#include <stocksoup/tf/annotations>
 #include <tutorial_text>
 #include <morecolors>
 #include <sdktools>
@@ -31,12 +29,13 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	RegAdminCmd("testtext", Cmd_TestTest, ADMFLAG_GENERIC);
-	CreateConVar("tutotial_text_commands", "", "Commands for tutorial text setting menu.")
+	CreateConVar("tutotial_text_commands", "textset", "Commands for tutorial text setting menu.")
 
 	AddCommandListener(Listener_Say, "say");
 	AddCommandListener(Listener_Say, "say_team");
 
 	LoadTranslations("tutorial_text");
+	RegPluginLibrary("tutorial_text");
 
 	if(g_hLoadedMap == null)
 		g_hLoadedMap = new StringMap();
@@ -49,13 +48,13 @@ public void OnMapStart()
 
 	g_hLoadedMap = new StringMap();
 
-	PrecacheTestConfig();
+	// PrecacheTestConfig();
 	PrecacheAllText();
 }
 
 void PrecacheTestConfig()
 {
-	KeyValues kv = new KeyValues("tutorial_text");
+	TTextKeyValue kv;
 
 	if(!ImportTestConfigKeyValues(kv))
     {
@@ -73,7 +72,7 @@ void PrecacheTestConfig()
 		do
 		{
 			kv.GetSectionName(messageId, sizeof(messageId));
-			GetConfigValue(messageId, "play_sound", soundPath, sizeof(soundPath));
+			kv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 			if(soundPath[0] == '\0') continue;
 
@@ -92,34 +91,39 @@ void PrecacheTestConfig()
 
 void PrecacheAllText()
 {
-	KeyValues kv = new KeyValues("tutorial_text");
+	TTextKeyValue kv;
 	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
 	char foldername[PLATFORM_MAX_PATH];
 	char filename[PLATFORM_MAX_PATH];
 
-	BuildPath(Path_SM, foldername, sizeof(foldername), "plugins/tutorial_text");
+	BuildPath(Path_SM, foldername, sizeof(foldername), "configs/tutorial_text");
 	Handle dir = OpenDirectory(foldername);
 	FileType filetype;
+
+	if(!DirExists(foldername))
+		SetFailState("no folder?");
 
 	while(ReadDirEntry(dir, filename, PLATFORM_MAX_PATH, filetype))
 	{
 		if(filetype == FileType_File)
 		{
 			Format(path, sizeof(path), "%s/%s", foldername, filename);
-			if(!kv.ImportFromFile(path)) continue;
+
+			kv = new TTextKeyValue(filename);
+			if(kv == null) continue;
 
 			kv.Rewind();
 
-			AddToStringMap(filename, view_as<TTextKeyValue>(kv));
+			AddToStringMap(filename, kv);
 
 			if(kv.GotoFirstSubKey())
 			{
 				do
 				{
 					kv.GetSectionName(messageId, sizeof(messageId));
-					GetConfigValue(messageId, "play_sound", soundPath, sizeof(soundPath));
+					kv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 					if(soundPath[0] == '\0') continue;
 
@@ -145,10 +149,12 @@ TTextKeyValue GetTextKeyValues(const char[] filename)
 	return g_hLoadedMap.GetValue(filename, temp) ? temp : view_as<TTextKeyValue>(null);
 }
 
-bool AddToStringMap(char[] filename, TTextKeyValue victimKv)
+public bool AddToStringMap(char[] filename, TTextKeyValue victimKv)
 {
 	TTextKeyValue temp;
-	temp.Import(victimKv);
+	temp.Import(view_as<KeyValues>(victimKv));
 
 	return g_hLoadedMap.SetValue(filename, temp, false);
 }
+
+//

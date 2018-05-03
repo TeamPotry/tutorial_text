@@ -22,17 +22,6 @@ stock TTextEvent LoadMessageID(char[] filename, char[] messageId)
     return event;
 }
 
-stock Handle FindCookieEx(char[] cookieName)
-{
-    Handle cookieHandle = FindClientCookie(cookieName);
-    if(cookieHandle == null)
-    {
-        cookieHandle = RegClientCookie(cookieName, "", CookieAccess_Protected);
-    }
-
-    return cookieHandle;
-}
-
 /////////////////////////////////////////////////////////////////////////////////
 
 stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
@@ -47,24 +36,17 @@ stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
 
 #define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
 
-public bool ImportTestConfigKeyValues(KeyValues victim)
+public bool ImportTestConfigKeyValues(TTextKeyValue victim)
 {
     char config[PLATFORM_MAX_PATH];
     BuildPath(Path_SM, config, sizeof(config), PLUGIN_TEST_CONFIG_FILE_PATH);
 
-    KeyValues configKv = new KeyValues("tutorial_text");
-
-    if(!FileExists(config) || !configKv.ImportFromFile(config))
+    if(!FileExists(config) || !victim.ImportFromFile(config))
     {
         SetFailState("[TT] \"%s\" is broken?!", PLUGIN_TEST_CONFIG_FILE_PATH); // 플러그인 정지
         victim = null;
         return false;
     }
-
-    configKv.Rewind();
-    victim.Import(configKv);
-
-    delete configKv;
 
     return true;
 }
@@ -87,44 +69,6 @@ public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
 
     victim.Import(temp);
     delete temp;
-
-    return true;
-}
-
-/*
-    Default languageId is English.
-
-    return = false: 오류, value 변동 없음
-*/
-stock bool GetConfigValue(char[] messageId, char[] key, char[] value, int buffer, int client = 0)
-{
-    KeyValues kv = new KeyValues("tutorial_text");
-    ImportTestConfigKeyValues(kv);
-
-    char langId[4];
-    if(IsValidClient(client))
-        GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
-    else
-        Format(langId, sizeof(langId), "en");
-
-
-    if(!kv.JumpToKey(messageId))
-    {
-        LogError("[TT] not found messageId in config ''%s''", messageId);
-        return false;
-    }
-
-    if(!StrEqual(langId, "en"))
-    {
-        if(!kv.JumpToKey(langId))
-        {
-            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
-            // 이 경우에는 그냥 영어로 변경.
-        }
-    }
-
-    kv.GetString(key, value, buffer);
-    delete kv;
 
     return true;
 }

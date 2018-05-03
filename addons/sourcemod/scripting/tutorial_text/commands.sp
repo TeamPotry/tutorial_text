@@ -9,7 +9,7 @@ public Action Cmd_TestTest(int client, int args)
 }
 
 
-public Action:Listener_Say(int client, const char[] command, int argc)
+public Action Listener_Say(int client, const char[] command, int argc)
 {
     if(!IsValidClient(client))	return Plugin_Continue;
 

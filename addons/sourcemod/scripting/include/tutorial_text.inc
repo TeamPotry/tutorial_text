@@ -4,22 +4,8 @@
 
 #define __tutotial_text_included
 
-/*
-
-enum TestTextDisplayType
-{
-    Type_ShowAll = 0,
-    Type_ShowClient, // Only for client who called menu.
-};
-
-enum TestTextPositionType
-{
-    Type_FollowClient = 0, // Follow client who called menu.
-    Type_FollowAim, // Seeing spot
-	Type_FollowAimTarget // follow entity in client's seeing spot.
-};
-
-*/
+#include <clientprefs>
+#include <stocksoup/tf/annotations>
 
 enum TextFireType
 {
@@ -30,12 +16,12 @@ enum TextFireType
 
 enum ShowMessageCookieRule
 {
+	Type_None = -1,
 	Type_Normal = 0, // text is no longer ignore rules. (But first message is will ignore SETTING.)
 	Type_OnlyOne, // only show when first time. (SETTING ignored.)
 	Type_EveryTime, // if text following this rule, always show text. (SETTING ignored.)
 	Type_NormalEvenFirst // text is no longer ignore rules.
 };
-
 
 methodmap TTSettingCookie < Handle {
 	public TTSettingCookie() {
@@ -57,81 +43,6 @@ methodmap TTSettingCookie < Handle {
 		SetClientCookie(client, this, temp);
 	}
 
-}
-
-methodmap TTCookie < Handle {
-	public TTCookie(const char[] filename, const char[] messageId) {
-		char temp[80];
-		Format(temp, sizeof(temp), "tutorial_text_id:%s_%s", filename, messageId);
-		return view_as<TTCookie>(FindCookieEx(temp));
-	}
-
-	public bool GetClientViewed(const int client)
-	{
-		char temp[2];
-		GetClientCookie(client, this, temp, sizeof(temp));
-		return StringToInt(temp) > 0;
-	}
-
-	public void SetClientViewed(const int client, bool value)
-	{
-		char temp[2];
-		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
-		SetClientCookie(client, this, temp);
-	}
-
-	public bool CheckRuleForClient(const int client)
-	{	// FIXME: OH MY GOD
-		char temp[80];
-		char exst[2][64]; // exst[1] is answer! wuaaaa
-		TTSettingCookie settingCookie = new TTSettingCookie();
-		CookieAccess access;
-		ReadCookieIterator(this, temp, sizeof(temp), access); // FIXME: access is no needed.
-		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
-
-		if(access == CookieAccess_Private)
-			return false; // FIXME: access is no needed.
-
-		GetConfigValue(exst[1], "cookie_rule", temp, sizeof(temp));
-		ShowMessageCookieRule rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
-
-		GetClientCookie(client, this, temp, sizeof(temp));
-		bool firstViewed = StringToInt(temp) > 0;
-
-		bool viewSetting = settingCookie.GetClientTextViewSetting(client);
-
-		switch(rule)
-		{
-		    case Type_Normal:
-		    {
-		        if(!viewSetting)
-		        {
-		            if(!firstViewed)
-		                return true;
-		            return false;
-		        }
-		    }
-
-		    case Type_OnlyOne:
-		    {
-		        if(firstViewed)
-		            return true;
-		        return false;
-		    }
-
-		    case Type_EveryTime:
-		    {
-		        return true;
-		    }
-
-		    case Type_NormalEvenFirst:
-		    {
-		        return viewSetting;
-		    }
-		}
-
-		return true;
-	}
 }
 
 methodmap TTextKeyValue < KeyValues {
@@ -177,6 +88,88 @@ methodmap TTextKeyValue < KeyValues {
 	}
 }
 
+methodmap TTCookie < Handle {
+	public TTCookie(const char[] filename, const char[] messageId) {
+		char temp[80];
+		Format(temp, sizeof(temp), "tutorial_text_id:%s_%s", filename, messageId);
+		return view_as<TTCookie>(FindCookieEx(temp));
+	}
+
+	public bool GetClientViewed(const int client)
+	{
+		char temp[2];
+		GetClientCookie(client, this, temp, sizeof(temp));
+		return StringToInt(temp) > 0;
+	}
+
+	public void SetClientViewed(const int client, bool value)
+	{
+		char temp[2];
+		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
+		SetClientCookie(client, this, temp);
+	}
+
+	public bool CheckRuleForClient(const TTextKeyValue kv, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
+	{	// FIXME: OH MY GOD
+		char temp[80];
+		char exst[2][64]; // exst[1] is answer! wuaaaa
+		TTSettingCookie settingCookie = new TTSettingCookie();
+		CookieAccess access;
+		ShowMessageCookieRule rule;
+		ReadCookieIterator(this, temp, sizeof(temp), access); // FIXME: access is no needed.
+		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
+
+		if(access == CookieAccess_Private)
+			return false; // FIXME: access is no needed.
+
+		if(customCookieRule != Type_None) {
+			rule = customCookieRule;
+		}
+		else {
+			kv.GetValue(exst[1], "cookie_rule", temp, sizeof(temp));
+			rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
+		}
+
+
+		GetClientCookie(client, this, temp, sizeof(temp));
+		bool firstViewed = StringToInt(temp) > 0;
+
+		bool viewSetting = settingCookie.GetClientTextViewSetting(client);
+
+		switch(rule)
+		{
+		    case Type_Normal:
+		    {
+		        if(!viewSetting)
+		        {
+		            if(!firstViewed)
+		                return true;
+		            return false;
+		        }
+		    }
+
+		    case Type_OnlyOne:
+		    {
+		        if(firstViewed)
+		            return true;
+		        return false;
+		    }
+
+		    case Type_EveryTime:
+		    {
+		        return true;
+		    }
+
+		    case Type_NormalEvenFirst:
+		    {
+		        return viewSetting;
+		    }
+		}
+
+		return true;
+	}
+}
+
 methodmap TTextEvent < TFAnnotationEvent {
 	public TTextEvent() {
 		return view_as<TTextEvent>(new TFAnnotationEvent());
@@ -193,7 +186,7 @@ methodmap TTextEvent < TFAnnotationEvent {
 		this.SetText(text);
 	}
 
-	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client)
+	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
 	{
 	    /*
 	        This function will fire annotation after rule checking.
@@ -201,7 +194,7 @@ methodmap TTextEvent < TFAnnotationEvent {
 	    */
 	    TTCookie cookie = new TTCookie(filename, messageId);
 
-	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(client))
+	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(new TTextKeyValue(filename), client, customCookieRule))
 	        return false;
 
 	    this.VisibilityBits = (1 << client);
@@ -232,7 +225,18 @@ native bool TT_LoadTutorialText(const char[] filename = "", TTextKeyValue &victi
 */
 native TTextEvent TT_LoadMessageID(const char[] filename, const char[] messageId);
 
-public SharedPlugin __pl_TUTORIAL_TEXT=
+stock Handle FindCookieEx(char[] cookieName)
+{
+    Handle cookieHandle = FindClientCookie(cookieName);
+    if(cookieHandle == null)
+    {
+        cookieHandle = RegClientCookie(cookieName, "", CookieAccess_Protected);
+    }
+
+    return cookieHandle;
+}
+
+public SharedPlugin __pl_tutorial_text=
 {
 	name="tutorial_text",
 	file="tutorial_text.smx",
