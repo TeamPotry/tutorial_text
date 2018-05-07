@@ -1,20 +1,28 @@
-stock TTextEvent LoadMessageID(char[] filename, char[] messageId)
+stock TTextEvent LoadMessageID(char[] filename = "", char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
-    TTextKeyValue kv;
+    TTextKeyValue temp;
     TTextEvent event = new TTextEvent();
-    LoadTutorialText(filename, kv);
+    if(StrEqual(filename, ""))
+    {
+        temp = new TTextKeyValue();
+    }
+    else if(!LoadTutorialText(filename, temp))
+    {
+        LogError("Can't load text and setting.");
+        return null;
+    }
 
-    kv.GetValue(messageId, "show_effect", values, sizeof(values));
+    temp.GetValue(messageId, "show_effect", values, sizeof(values));
     event.ShowEffect = StringToInt(values) > 0 ? true : false;
 
-    kv.GetValue(messageId, "show_distance", values, sizeof(values));
+    temp.GetValue(messageId, "show_distance", values, sizeof(values));
     event.ShowDistance = StringToInt(values) > 0 ? true : false;
 
-    kv.GetValue(messageId, "id", values, sizeof(values));
+    temp.GetValue(messageId, "id", values, sizeof(values));
     event.ID = StringToInt(values);
 
-    kv.GetValue(messageId, "play_sound", values, sizeof(values));
+    temp.GetValue(messageId, "play_sound", values, sizeof(values));
     event.SetSound(values);
 
     event.SetText(messageId);
@@ -34,8 +42,7 @@ stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)
 
 /////////////////////////////////////////////////////////////////////////////////
 
-#define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
-
+/*
 public bool ImportTestConfigKeyValues(TTextKeyValue victim)
 {
     char config[PLATFORM_MAX_PATH];
@@ -50,25 +57,14 @@ public bool ImportTestConfigKeyValues(TTextKeyValue victim)
 
     return true;
 }
+*/
 
 public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
 {
-    TTextKeyValue temp;
+    GetTextKeyValues(filename, victim);
 
-    if(filename[0] != '\0')
-    {
-        temp = GetTextKeyValues(filename);
-    }
-    else
-    {
-        ImportTestConfigKeyValues(temp);
-    }
-
-    if(temp == null)
+    if(victim == null)
         return false;
-
-    victim.Import(temp);
-    delete temp;
 
     return true;
 }

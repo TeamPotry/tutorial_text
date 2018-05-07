@@ -45,17 +45,22 @@ methodmap TTSettingCookie < Handle {
 
 }
 
+#define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
+
 methodmap TTextKeyValue < KeyValues {
 	public TTextKeyValue(const char[] filename = "") {
-		TTextKeyValue kv = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
+		TTextKeyValue keyValue = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 
 		char config[PLATFORM_MAX_PATH];
-		BuildPath(Path_SM, config, sizeof(config), "configs/tutorial_text/%s", filename);
+		if(filename[0] != '\0')
+			BuildPath(Path_SM, config, sizeof(config), "configs/tutorial_text/%s", filename);
+		else
+			BuildPath(Path_SM, config, sizeof(config), PLUGIN_TEST_CONFIG_FILE_PATH);
 
-		if(!FileExists(config) || !kv.ImportFromFile(config))
+		if(!FileExists(config) || !keyValue.ImportFromFile(config))
 			return null;
 
-		return kv;
+		return keyValue;
 	}
 
 	public bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0)
@@ -66,8 +71,18 @@ methodmap TTextKeyValue < KeyValues {
 	    else
 	        Format(langId, sizeof(langId), "en");
 
+		TTextKeyValue cloned = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 
-	    if(!this.JumpToKey(messageId))
+		int id;
+		this.GetSectionSymbol(id);
+		this.Rewind();
+
+		cloned.Import(this);
+		cloned.Rewind();
+
+		this.JumpToKeySymbol(id);
+
+	    if(!cloned.JumpToKey(messageId))
 	    {
 	        LogError("[TT] not found messageId in config ''%s''", messageId);
 	        return false;
@@ -75,14 +90,15 @@ methodmap TTextKeyValue < KeyValues {
 
 	    if(!StrEqual(langId, "en"))
 	    {
-	        if(!this.JumpToKey(langId))
+	        if(!cloned.JumpToKey(langId))
 	        {
 	            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
 	            // 이 경우에는 그냥 영어로 변경.
 	        }
 	    }
 
-	    this.GetString(key, value, buffer);
+	    cloned.GetString(key, value, buffer);
+		delete cloned;
 
 	    return true;
 	}
@@ -116,8 +132,11 @@ methodmap TTCookie < Handle {
 		TTSettingCookie settingCookie = new TTSettingCookie();
 		CookieAccess access;
 		ShowMessageCookieRule rule;
-		ReadCookieIterator(this, temp, sizeof(temp), access); // FIXME: access is no needed.
+
+		Handle Iter = GetCookieIterator();
+		ReadCookieIterator(Iter, temp, sizeof(temp), access); // FIXME: access is no needed.
 		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
+		delete Iter;
 
 		if(access == CookieAccess_Private)
 			return false; // FIXME: access is no needed.
@@ -129,7 +148,6 @@ methodmap TTCookie < Handle {
 			kv.GetValue(exst[1], "cookie_rule", temp, sizeof(temp));
 			rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
 		}
-
 
 		GetClientCookie(client, this, temp, sizeof(temp));
 		bool firstViewed = StringToInt(temp) > 0;
@@ -175,18 +193,18 @@ methodmap TTextEvent < TFAnnotationEvent {
 		return view_as<TTextEvent>(new TFAnnotationEvent());
 	}
 
-	public void ChangeTextLanguage(const char[] filename, const char[] messageId, const int client)
+	public void ChangeTextLanguage(const char[] filename = "", const char[] messageId, const int client)
 	{
 		if(!IsClientInGame(client) || IsFakeClient(client)) return;
 
-		TTextKeyValue kv = new TTextKeyValue(filename);
+		TTextKeyValue temp = new TTextKeyValue(filename);
 		char text[128];
-		kv.GetValue(messageId, "text", text, sizeof(text), client);
+		temp.GetValue(messageId, "text", text, sizeof(text), client);
 
 		this.SetText(text);
 	}
 
-	public bool FireTutorialText(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
+	public bool FireTutorialText(const char[] filename = "", const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
 	{
 	    /*
 	        This function will fire annotation after rule checking.

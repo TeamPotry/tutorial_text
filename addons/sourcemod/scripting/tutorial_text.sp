@@ -48,15 +48,15 @@ public void OnMapStart()
 
 	g_hLoadedMap = new StringMap();
 
-	// PrecacheTestConfig();
+	PrecacheTestConfig();
 	PrecacheAllText();
 }
 
 void PrecacheTestConfig()
 {
-	TTextKeyValue kv;
+	TTextKeyValue testKv = new TTextKeyValue();
 
-	if(!ImportTestConfigKeyValues(kv))
+	if(testKv == null)
     {
 		LogError("%t", "menu_cached_id_message_error");
 		return;
@@ -65,14 +65,14 @@ void PrecacheTestConfig()
 	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
-	kv.Rewind();
+	testKv.Rewind();
 
-	if(kv.GotoFirstSubKey())
+	if(testKv.GotoFirstSubKey())
 	{
 		do
 		{
-			kv.GetSectionName(messageId, sizeof(messageId));
-			kv.GetString("play_sound", soundPath, sizeof(soundPath));
+			testKv.GetSectionName(messageId, sizeof(messageId));
+			testKv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 			if(soundPath[0] == '\0') continue;
 
@@ -85,13 +85,13 @@ void PrecacheTestConfig()
 			if(!IsSoundPrecached(soundPath))
 				PrecacheSound(soundPath);
 		}
-		while(kv.GotoNextKey());
+		while(testKv.GotoNextKey());
 	}
 }
 
 void PrecacheAllText()
 {
-	TTextKeyValue kv;
+	TTextKeyValue fileKv;
 	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
@@ -111,19 +111,19 @@ void PrecacheAllText()
 		{
 			Format(path, sizeof(path), "%s/%s", foldername, filename);
 
-			kv = new TTextKeyValue(filename);
-			if(kv == null) continue;
+			fileKv = new TTextKeyValue(filename);
+			if(fileKv == null) continue;
 
-			kv.Rewind();
+			fileKv.Rewind();
 
-			AddToStringMap(filename, kv);
+			AddToStringMap(filename, fileKv);
 
-			if(kv.GotoFirstSubKey())
+			if(fileKv.GotoFirstSubKey())
 			{
 				do
 				{
-					kv.GetSectionName(messageId, sizeof(messageId));
-					kv.GetString("play_sound", soundPath, sizeof(soundPath));
+					fileKv.GetSectionName(messageId, sizeof(messageId));
+					fileKv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 					if(soundPath[0] == '\0') continue;
 
@@ -136,25 +136,28 @@ void PrecacheAllText()
 					if(!IsSoundPrecached(soundPath))
 						PrecacheSound(soundPath);
 				}
-				while(kv.GotoNextKey());
+				while(fileKv.GotoNextKey());
 			}
 		}
 	}
 }
 
-TTextKeyValue GetTextKeyValues(const char[] filename)
+bool GetTextKeyValues(const char[] filename, TTextKeyValue victim)
 {
 	TTextKeyValue temp;
-
-	return g_hLoadedMap.GetValue(filename, temp) ? temp : view_as<TTextKeyValue>(null);
+	if(!g_hLoadedMap.GetValue(filename, temp) || temp == null)
+	{
+		return false;
+	}
+	temp.Rewind();
+	victim.Import(temp);
+	return true;
 }
 
 public bool AddToStringMap(char[] filename, TTextKeyValue victimKv)
 {
-	TTextKeyValue temp;
+	TTextKeyValue temp = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 	temp.Import(view_as<KeyValues>(victimKv));
 
 	return g_hLoadedMap.SetValue(filename, temp, false);
 }
-
-//
