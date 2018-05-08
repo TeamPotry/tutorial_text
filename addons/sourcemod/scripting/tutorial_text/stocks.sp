@@ -1,7 +1,7 @@
 stock TTextEvent LoadMessageID(char[] filename = "", char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
-    TTextKeyValue temp;
+    TTextKeyValue temp = null;
     TTextEvent event = new TTextEvent();
     if(StrEqual(filename, ""))
     {
@@ -61,8 +61,10 @@ public bool ImportTestConfigKeyValues(TTextKeyValue victim)
 
 public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
 {
-    GetTextKeyValues(filename, victim);
+    if(victim != null)
+        delete victim;
 
+    victim = GetTextKeyValues(filename); // FIXME: 하지만 INVALID.
     if(victim == null)
         return false;
 

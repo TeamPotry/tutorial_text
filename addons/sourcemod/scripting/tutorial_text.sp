@@ -39,6 +39,8 @@ public void OnPluginStart()
 
 	if(g_hLoadedMap == null)
 		g_hLoadedMap = new StringMap();
+
+	// PrecacheAllText();
 }
 
 public void OnMapStart()
@@ -92,7 +94,6 @@ void PrecacheTestConfig()
 void PrecacheAllText()
 {
 	TTextKeyValue fileKv;
-	char messageId[64];
 	char path[PLATFORM_MAX_PATH];
 	char soundPath[PLATFORM_MAX_PATH];
 	char foldername[PLATFORM_MAX_PATH];
@@ -109,12 +110,11 @@ void PrecacheAllText()
 	{
 		if(filetype == FileType_File)
 		{
-			Format(path, sizeof(path), "%s/%s", foldername, filename);
-
 			fileKv = new TTextKeyValue(filename);
 			if(fileKv == null) continue;
 
 			fileKv.Rewind();
+			LogMessage("%x Added.", fileKv);
 
 			AddToStringMap(filename, fileKv);
 
@@ -122,7 +122,6 @@ void PrecacheAllText()
 			{
 				do
 				{
-					fileKv.GetSectionName(messageId, sizeof(messageId));
 					fileKv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 					if(soundPath[0] == '\0') continue;
@@ -138,26 +137,28 @@ void PrecacheAllText()
 				}
 				while(fileKv.GotoNextKey());
 			}
+
+			delete fileKv;
 		}
 	}
 }
 
-bool GetTextKeyValues(const char[] filename, TTextKeyValue victim)
+TTextKeyValue GetTextKeyValues(const char[] filename)
 {
-	TTextKeyValue temp;
-	if(!g_hLoadedMap.GetValue(filename, temp) || temp == null)
+	TTextKeyValue cloned;
+
+	if(!g_hLoadedMap.GetValue(filename, cloned))
 	{
-		return false;
+		return null;
 	}
-	temp.Rewind();
-	victim.Import(temp);
-	return true;
+
+	return view_as<TTextKeyValue>(CloneHandle(cloned));
 }
 
 public bool AddToStringMap(char[] filename, TTextKeyValue victimKv)
 {
-	TTextKeyValue temp = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
-	temp.Import(view_as<KeyValues>(victimKv));
-
-	return g_hLoadedMap.SetValue(filename, temp, false);
+	TTextKeyValue cloned = view_as<TTextKeyValue>(CloneHandle(victimKv));
+	LogMessage("%x Cloned.", cloned);
+	cloned.Rewind();
+	return g_hLoadedMap.SetValue(filename, cloned, false);
 }

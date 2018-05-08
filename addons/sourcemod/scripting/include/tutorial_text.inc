@@ -253,7 +253,7 @@ stock Handle FindCookieEx(char[] cookieName)
 
     return cookieHandle;
 }
-
+/*
 public SharedPlugin __pl_tutorial_text=
 {
 	name="tutorial_text",
@@ -266,9 +266,10 @@ public SharedPlugin __pl_tutorial_text=
 };
 
 #if !defined REQUIRE_PLUGIN
-public __pl_TUTORIAL_TEXT_SetNTVOptional()
+public __pl_tutorial_text_SetNTVOptional()
 {
 	MarkNativeAsOptional("TT_LoadMessageID");
 	MarkNativeAsOptional("TT_FireTutorialText");
 }
 #endif
+*/
