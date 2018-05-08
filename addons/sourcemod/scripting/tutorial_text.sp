@@ -18,8 +18,6 @@ public Plugin myinfo =
 	url = "https://github.com/TeamPotry/tutorial_text"
 };
 
-StringMap g_hLoadedMap = null;
-
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	CreateNative("TT_LoadTutorialText", Native_LoadTutorialText);
@@ -36,20 +34,10 @@ public void OnPluginStart()
 
 	LoadTranslations("tutorial_text");
 	RegPluginLibrary("tutorial_text");
-
-	if(g_hLoadedMap == null)
-		g_hLoadedMap = new StringMap();
-
-	// PrecacheAllText();
 }
 
 public void OnMapStart()
 {
-	if(g_hLoadedMap != null)
-		delete g_hLoadedMap;
-
-	g_hLoadedMap = new StringMap();
-
 	PrecacheTestConfig();
 	PrecacheAllText();
 }
@@ -113,11 +101,6 @@ void PrecacheAllText()
 			fileKv = new TTextKeyValue(filename);
 			if(fileKv == null) continue;
 
-			fileKv.Rewind();
-			LogMessage("%x Added.", fileKv);
-
-			AddToStringMap(filename, fileKv);
-
 			if(fileKv.GotoFirstSubKey())
 			{
 				do
@@ -141,24 +124,4 @@ void PrecacheAllText()
 			delete fileKv;
 		}
 	}
-}
-
-TTextKeyValue GetTextKeyValues(const char[] filename)
-{
-	TTextKeyValue cloned;
-
-	if(!g_hLoadedMap.GetValue(filename, cloned))
-	{
-		return null;
-	}
-
-	return view_as<TTextKeyValue>(CloneHandle(cloned));
-}
-
-public bool AddToStringMap(char[] filename, TTextKeyValue victimKv)
-{
-	TTextKeyValue cloned = view_as<TTextKeyValue>(CloneHandle(victimKv));
-	LogMessage("%x Cloned.", cloned);
-	cloned.Rewind();
-	return g_hLoadedMap.SetValue(filename, cloned, false);
 }

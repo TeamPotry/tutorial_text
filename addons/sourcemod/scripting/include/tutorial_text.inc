@@ -231,7 +231,7 @@ methodmap TTextEvent < TFAnnotationEvent {
 
 	@return false = Failed.
 */
-native bool TT_LoadTutorialText(const char[] filename = "", TTextKeyValue &victim);
+native TTextKeyValue TT_LoadTutorialText(const char[] filename = "");
 
 /*
 	Load message text from id in config.

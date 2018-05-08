@@ -10,5 +10,5 @@ public int Native_LoadTutorialText(Handle plugin, int numParams)
 {
     char temp[64];
     GetNativeString(1, temp, sizeof(temp));
-    return LoadTutorialText(temp, GetNativeCellRef(2));
+    return view_as<int>(new TTextKeyValue(temp));
 }

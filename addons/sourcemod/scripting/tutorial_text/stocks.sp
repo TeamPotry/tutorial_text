@@ -1,13 +1,10 @@
 stock TTextEvent LoadMessageID(char[] filename = "", char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
-    TTextKeyValue temp = null;
+    TTextKeyValue temp = new TTextKeyValue(filename);
     TTextEvent event = new TTextEvent();
-    if(StrEqual(filename, ""))
-    {
-        temp = new TTextKeyValue();
-    }
-    else if(!LoadTutorialText(filename, temp))
+
+    if(temp == null)
     {
         LogError("Can't load text and setting.");
         return null;
@@ -58,18 +55,6 @@ public bool ImportTestConfigKeyValues(TTextKeyValue victim)
     return true;
 }
 */
-
-public bool LoadTutorialText(const char[] filename, TTextKeyValue victim)
-{
-    if(victim != null)
-        delete victim;
-
-    victim = GetTextKeyValues(filename); // FIXME: 하지만 INVALID.
-    if(victim == null)
-        return false;
-
-    return true;
-}
 
 /////////////////////////////////////////////////////////////////////////////////
 
