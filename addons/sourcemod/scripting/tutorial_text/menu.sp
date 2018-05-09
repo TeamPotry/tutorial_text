@@ -48,7 +48,8 @@ public int OnSelectTextMenu(Menu menu, MenuAction action, int client, int item)
             char infoBuf[64];
             menu.GetItem(item, infoBuf, sizeof(infoBuf));
 
-            TTextEvent event = LoadMessageID(_, infoBuf);
+            TTextEvent event = new TTextEvent();
+            LoadMessageID(event, _, infoBuf);
 
             static float endPos[3];
             GetClientEyeEndPos(client, endPos);

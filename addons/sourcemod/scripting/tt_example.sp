@@ -20,8 +20,10 @@ public Action Cmd_TestTest(int client, int args)
 {
     if(client > 0 && IsClientInGame(client))
     {
-        TTextEvent event = TT_LoadMessageID("the_test_text.cfg", "this_is_text_text");
-        float position[3];
+        TTextEvent event = new TTextEvent();
+		float position[3];
+
+		TT_LoadMessageID(event, "the_test_text.cfg", "this_is_text_text");
         GetClientEyePosition(client, position);
         event.SetPosition(position);
 

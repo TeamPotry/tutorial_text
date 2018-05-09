@@ -1,13 +1,12 @@
-stock TTextEvent LoadMessageID(char[] filename = "", char[] messageId)
+stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];
     TTextKeyValue temp = new TTextKeyValue(filename);
-    TTextEvent event = new TTextEvent();
 
     if(temp == null)
     {
         LogError("Can't load text and setting.");
-        return null;
+        return false;
     }
 
     temp.GetValue(messageId, "show_effect", values, sizeof(values));
@@ -24,7 +23,7 @@ stock TTextEvent LoadMessageID(char[] filename = "", char[] messageId)
 
     event.SetText(messageId);
 
-    return event;
+    return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////

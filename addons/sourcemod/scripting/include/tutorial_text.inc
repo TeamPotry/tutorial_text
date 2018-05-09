@@ -125,33 +125,24 @@ methodmap TTCookie < Handle {
 		SetClientCookie(client, this, temp);
 	}
 
-	public bool CheckRuleForClient(const TTextKeyValue kv, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
-	{	// FIXME: OH MY GOD
+	public bool CheckRuleForClient(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
+	{
 		char temp[80];
-		char exst[2][64]; // exst[1] is answer! wuaaaa
 		TTSettingCookie settingCookie = new TTSettingCookie();
-		CookieAccess access;
 		ShowMessageCookieRule rule;
-
-		Handle Iter = GetCookieIterator();
-		ReadCookieIterator(Iter, temp, sizeof(temp), access); // FIXME: access is no needed.
-		ExplodeString(temp, ":", exst, sizeof(exst), sizeof(exst[]))
-		delete Iter;
-
-		if(access == CookieAccess_Private)
-			return false; // FIXME: access is no needed.
 
 		if(customCookieRule != Type_None) {
 			rule = customCookieRule;
 		}
 		else {
-			kv.GetValue(exst[1], "cookie_rule", temp, sizeof(temp));
+			TTextKeyValue kv = new TTextKeyValue(filename);
+			kv.GetValue(messageId, "cookie_rule", temp, sizeof(temp));
 			rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
+			delete kv;
 		}
 
 		GetClientCookie(client, this, temp, sizeof(temp));
 		bool firstViewed = StringToInt(temp) > 0;
-
 		bool viewSetting = settingCookie.GetClientTextViewSetting(client);
 
 		switch(rule)
@@ -211,14 +202,23 @@ methodmap TTextEvent < TFAnnotationEvent {
 	        And it will set Viewed Cookie.
 	    */
 	    TTCookie cookie = new TTCookie(filename, messageId);
+		TTextKeyValue tempKeyValues = null;
 
-	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(new TTextKeyValue(filename), client, customCookieRule))
-	        return false;
+	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
+		{
+			delete cookie;
+			delete tempKeyValues;
+
+			return false;
+		}
 
 	    this.VisibilityBits = (1 << client);
 	    cookie.SetClientViewed(client, true);
 
 	    this.Fire();
+		delete cookie;
+		delete tempKeyValues;
+
 	    return true;
 	}
 }
@@ -241,7 +241,7 @@ native TTextKeyValue TT_LoadTutorialText(const char[] filename = "");
 
 	@return
 */
-native TTextEvent TT_LoadMessageID(const char[] filename, const char[] messageId);
+native bool TT_LoadMessageID(TTextEvent &event, const char[] filename, const char[] messageId);
 
 stock Handle FindCookieEx(char[] cookieName)
 {
