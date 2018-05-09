@@ -65,11 +65,12 @@ methodmap TTextKeyValue < KeyValues {
 
 	public bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0)
 	{
-	    char langId[4];
-	    if(client > 0 && IsClientInGame(client))
-	        GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
-	    else
-	        Format(langId, sizeof(langId), "en");
+		char langId[4];
+
+		if(client > 0 && IsClientInGame(client))
+		    GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
+		else
+		    Format(langId, sizeof(langId), "en");
 
 		TTextKeyValue cloned = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 
@@ -82,25 +83,25 @@ methodmap TTextKeyValue < KeyValues {
 
 		this.JumpToKeySymbol(id);
 
-	    if(!cloned.JumpToKey(messageId))
-	    {
-	        LogError("[TT] not found messageId in config ''%s''", messageId);
-	        return false;
-	    }
+		if(!cloned.JumpToKey(messageId))
+		{
+		    LogError("[TT] not found messageId in config ''%s''", messageId);
+		    return false;
+		}
 
-	    if(!StrEqual(langId, "en"))
-	    {
-	        if(!cloned.JumpToKey(langId))
-	        {
-	            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
-	            // 이 경우에는 그냥 영어로 변경.
-	        }
-	    }
+		if(!StrEqual(langId, "en"))
+		{
+		    if(!cloned.JumpToKey(langId))
+		    {
+		        LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
+		        // 이 경우에는 그냥 영어로 변경.
+		    }
+		}
 
-	    cloned.GetString(key, value, buffer);
+		cloned.GetString(key, value, buffer);
 		delete cloned;
 
-	    return true;
+		return true;
 	}
 }
 
@@ -197,14 +198,14 @@ methodmap TTextEvent < TFAnnotationEvent {
 
 	public bool FireTutorialText(const char[] filename = "", const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
 	{
-	    /*
-	        This function will fire annotation after rule checking.
-	        And it will set Viewed Cookie.
-	    */
-	    TTCookie cookie = new TTCookie(filename, messageId);
+		/*
+		This function will fire annotation after rule checking.
+		And it will set Viewed Cookie.
+		*/
+		TTCookie cookie = new TTCookie(filename, messageId);
 		TTextKeyValue tempKeyValues = null;
 
-	    if(IsFakeClient(client) || !cookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
+		if(IsFakeClient(client) || !cookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
 		{
 			delete cookie;
 			delete tempKeyValues;
@@ -212,14 +213,14 @@ methodmap TTextEvent < TFAnnotationEvent {
 			return false;
 		}
 
-	    this.VisibilityBits = (1 << client);
-	    cookie.SetClientViewed(client, true);
+		this.VisibilityBits = (1 << client);
+		cookie.SetClientViewed(client, true);
 
-	    this.Fire();
+		this.Fire();
 		delete cookie;
 		delete tempKeyValues;
 
-	    return true;
+		return true;
 	}
 }
 

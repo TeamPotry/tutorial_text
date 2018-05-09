@@ -18,23 +18,23 @@ public void OnPluginStart()
 
 public Action Cmd_TestTest(int client, int args)
 {
-    if(client > 0 && IsClientInGame(client))
-    {
-        TTextEvent event = new TTextEvent();
+	if(client > 0 && IsClientInGame(client))
+	{
+		TTextEvent event = new TTextEvent();
 		float position[3];
 
 		TT_LoadMessageID(event, "the_test_text.cfg", "this_is_text_text");
-        GetClientEyePosition(client, position);
-        event.SetPosition(position);
+		GetClientEyePosition(client, position);
+		event.SetPosition(position);
 
-        for(int target = 1; target <= MaxClients; target++)
-        {
-            if(!IsClientInGame(target)) continue;
+		for(int target = 1; target <= MaxClients; target++)
+		{
+			if(!IsClientInGame(target)) continue;
 
-            event.ChangeTextLanguage("the_test_text.cfg", "this_is_text_text", target);
-            event.FireTutorialText("the_test_text.cfg", "this_is_text_text", target);
-        }
-    }
+			event.ChangeTextLanguage("the_test_text.cfg", "this_is_text_text", target);
+			event.FireTutorialText("the_test_text.cfg", "this_is_text_text", target);
+		}
+	}
 
-    return Plugin_Continue;
+	return Plugin_Continue;
 }
