@@ -5,7 +5,7 @@ stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageI
 
     if(temp == null)
     {
-        LogError("Can't load text and setting.");
+        ThrowError("Can't load text and setting.");
         return false;
     }
 
@@ -22,6 +22,8 @@ stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageI
     event.SetSound(values);
 
     event.SetText(messageId);
+
+    delete temp;
 
     return true;
 }

@@ -14,6 +14,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
     RegAdminCmd("givetext", Cmd_TestTest, ADMFLAG_GENERIC);
+	RegAdminCmd("givenumtext", Cmd_NumTest, ADMFLAG_GENERIC);
 }
 
 public Action Cmd_TestTest(int client, int args)
@@ -27,13 +28,32 @@ public Action Cmd_TestTest(int client, int args)
 		GetClientEyePosition(client, position);
 		event.SetPosition(position);
 
-		for(int target = 1; target <= MaxClients; target++)
-		{
-			if(!IsClientInGame(target)) continue;
+		event.FireTutorialTextAll("the_test_text.cfg", "this_is_text_text");
 
-			event.ChangeTextLanguage("the_test_text.cfg", "this_is_text_text", target);
-			event.FireTutorialText("the_test_text.cfg", "this_is_text_text", target);
-		}
+		// delete event;
+	}
+
+	return Plugin_Continue;
+}
+
+public Action Cmd_NumTest(int client, int args)
+{
+	if(client > 0 && IsClientInGame(client))
+	{
+		TTextEvent event = new TTextEvent();
+		float position[3];
+
+		TT_LoadMessageID(event, "the_test_text.cfg", "this_is_9");
+		GetClientEyePosition(client, position);
+		event.SetPosition(position);
+
+		ArrayList messagePara = new ArrayList();
+		messagePara.Push(9);
+
+		event.FireTutorialTextAll("the_test_text.cfg", "this_is_9", messagePara);
+
+		delete messagePara;
+		// delete event;
 	}
 
 	return Plugin_Continue;
