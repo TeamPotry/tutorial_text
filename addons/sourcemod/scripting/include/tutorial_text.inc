@@ -205,7 +205,7 @@ methodmap TTextEvent < TFAnnotationEvent {
 			formatCount++;
 		}
 
-		if(formatCount > 0 || formatCount < 16)
+		if(formatCount > 0 && formatCount < 16)
 		{
 			if(parameterArray == null || formatCount != parameterArray.Length)
 			{
@@ -235,7 +235,6 @@ methodmap TTextEvent < TFAnnotationEvent {
 					Format(tempString, sizeof(tempString), tempItem, parameterArray.Get(loop - 1));
 				}
 				Format(tempNumberStr, sizeof(tempNumberStr), "{%i}", loop);
-				PrintToChatAll(tempString);
 				ReplaceString(text, sizeof(text), tempNumberStr, tempString);
 			}
 		}
