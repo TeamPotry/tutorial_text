@@ -13,7 +13,7 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    RegAdminCmd("givetext", Cmd_TestTest, ADMFLAG_GENERIC);
+	RegAdminCmd("givetext", Cmd_TestTest, ADMFLAG_GENERIC);
 	RegAdminCmd("givenumtext", Cmd_NumTest, ADMFLAG_GENERIC);
 }
 
