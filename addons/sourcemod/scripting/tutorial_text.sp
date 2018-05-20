@@ -68,7 +68,7 @@ void PrecacheTestConfig()
 
 			Format(path, sizeof(path), "sound/%s", soundPath);
 			if(!FileExists(path)) {
-				LogError("%t", "sound_not_found");
+				LogError("%t", "sound_not_found", soundPath);
 				continue;
 			}
 
@@ -111,7 +111,7 @@ void PrecacheAllText()
 
 					Format(path, sizeof(path), "sound/%s", soundPath);
 					if(!FileExists(path)) {
-						LogError("%t", "sound_not_found");
+						LogError("%t", "sound_not_found", soundPath);
 						continue;
 					}
 
