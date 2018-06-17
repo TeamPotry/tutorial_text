@@ -74,19 +74,26 @@ methodmap TTextKeyValue < KeyValues {
 
 		TTextKeyValue cloned = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
 
-		int id;
-		this.GetSectionSymbol(id);
-		this.Rewind();
-
-		cloned.Import(this);
-		cloned.Rewind();
-
-		this.JumpToKeySymbol(id);
-
-		if(messageId[0] != '\0' && !cloned.JumpToKey(messageId))
+		if(messageId[0] != '\0')
 		{
-		    LogError("[TT] not found messageId in config ''%s''", messageId);
-		    return false;
+			int id;
+
+			this.GetSectionSymbol(id);
+			this.Rewind();
+
+			cloned.Import(this);
+
+			this.JumpToKeySymbol(id);
+
+			if(!cloned.JumpToKey(keyName))
+			{
+			    LogError("[TT] not found keyName in config ''%s''", messageId);
+				delete cloned;
+			    return false;
+			}
+		}
+		else {
+			cloned.Import(this);
 		}
 
 		if(!StrEqual(langId, "en"))
