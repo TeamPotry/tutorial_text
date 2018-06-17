@@ -83,7 +83,7 @@ methodmap TTextKeyValue < KeyValues {
 
 		this.JumpToKeySymbol(id);
 
-		if(!cloned.JumpToKey(messageId))
+		if(messageId[0] != '\0' && !cloned.JumpToKey(messageId))
 		{
 		    LogError("[TT] not found messageId in config ''%s''", messageId);
 		    return false;
