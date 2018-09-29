@@ -1,3 +1,9 @@
+void Native_Init()
+{
+    CreateNative("TT_LoadTutorialText", Native_LoadTutorialText);
+    CreateNative("TT_LoadMessageID", Native_LoadMessageID);
+}
+
 public int Native_LoadMessageID(Handle plugin, int numParams)
 {
     char temp[64], temp_id[64];

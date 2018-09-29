@@ -20,8 +20,7 @@ public Plugin myinfo =
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	CreateNative("TT_LoadTutorialText", Native_LoadTutorialText);
-	CreateNative("TT_LoadMessageID", Native_LoadMessageID);
+	Native_Init();
 }
 
 public void OnPluginStart()
