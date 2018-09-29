@@ -11,7 +11,7 @@ enum TextFireType
 {
     FireType_Test = 0, // Fire from tutorial_text.sp test menu.
     FireType_ConfigId, // Fire from ID in config file.
-	FireType_SubPlugin // Fire from another plugin using TT_FireTutorialText Function. (Can use Custom MEssageID.)
+	FireType_SubPlugin // Fire from another plugin using TT_FireTutorialText Function. (Can use Custom MessageID.)
 };
 
 enum ShowMessageCookieRule
