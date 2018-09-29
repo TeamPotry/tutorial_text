@@ -1,4 +1,5 @@
 #include <sourcemod>
+#include <clientprefs>
 #include <tutorial_text>
 #include <morecolors>
 #include <sdktools>

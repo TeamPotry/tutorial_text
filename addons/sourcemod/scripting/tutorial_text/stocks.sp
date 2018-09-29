@@ -28,6 +28,17 @@ stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageI
     return true;
 }
 
+stock Handle FindCookieEx(char[] cookieName)
+{
+    Handle cookieHandle = FindClientCookie(cookieName);
+    if(cookieHandle == null)
+    {
+        cookieHandle = RegClientCookie(cookieName, "", CookieAccess_Protected);
+    }
+
+    return cookieHandle;
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 
 stock bool IsConVarCommand(const char[] cvarName, const char[] cmd)

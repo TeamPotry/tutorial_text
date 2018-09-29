@@ -4,7 +4,6 @@
 
 #define __tutotial_text_included
 
-#include <clientprefs>
 #include <stocksoup/tf/annotations>
 
 enum TextFireType
@@ -315,17 +314,6 @@ native TTextKeyValue TT_LoadTutorialText(const char[] filename = "");
 	@return
 */
 native bool TT_LoadMessageID(TTextEvent &event, const char[] filename, const char[] messageId);
-
-stock Handle FindCookieEx(char[] cookieName)
-{
-    Handle cookieHandle = FindClientCookie(cookieName);
-    if(cookieHandle == null)
-    {
-        cookieHandle = RegClientCookie(cookieName, "", CookieAccess_Protected);
-    }
-
-    return cookieHandle;
-}
 
 stock void CopyMessageEvent(TTextEvent event, TTextEvent victim)
 {
