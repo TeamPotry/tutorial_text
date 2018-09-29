@@ -85,11 +85,11 @@ methodmap TTextKeyValue < KeyValues {
 
 			this.JumpToKeySymbol(id);
 
-			if(!cloned.JumpToKey(keyName))
+			if(!cloned.JumpToKey(key))
 			{
-			    LogError("[TT] not found keyName in config ''%s''", messageId);
+				LogError("[TT] not found keyName in config ''%s''", messageId);
 				delete cloned;
-			    return false;
+				return false;
 			}
 		}
 		else {
