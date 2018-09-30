@@ -22,26 +22,12 @@ enum ShowMessageCookieRule
 	Type_NormalEvenFirst // text is no longer ignore rules.
 };
 
-methodmap TTSettingCookie < Handle {
-	public TTSettingCookie() {
-		char temp[40];
-		Format(temp, sizeof(temp), "tutorial_text_setting");
-		return view_as<TTSettingCookie>(FindCookieEx(temp));
-	}
+methodmap TTSettingCookie {
+	public static native Handle GetTTSettingCookie();
 
-	public bool GetClientTextViewSetting(const int client) {
-		char temp[80];
-		GetClientCookie(client, this, temp, sizeof(temp));
+	public static native bool GetClientTextViewSetting(const int client);
 
-		return StringToInt(temp) > 0;
-	}
-
-	public void SetClientTextViewSetting(const int client, bool setting) {
-		char temp[2];
-		Format(temp, sizeof(temp), "%s", setting ? "1" : "0");
-		SetClientCookie(client, this, temp);
-	}
-
+	public static native void SetClientTextViewSetting(const int client, bool setting);
 }
 
 #define PLUGIN_TEST_CONFIG_FILE_PATH "configs/tutorial_text.cfg"
@@ -135,7 +121,6 @@ methodmap TTCookie < Handle {
 	public bool CheckRuleForClient(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
 	{
 		char temp[80];
-		TTSettingCookie settingCookie = new TTSettingCookie();
 		ShowMessageCookieRule rule;
 
 		if(customCookieRule != Type_None) {
@@ -150,7 +135,7 @@ methodmap TTCookie < Handle {
 
 		GetClientCookie(client, this, temp, sizeof(temp));
 		bool firstViewed = StringToInt(temp) > 0;
-		bool viewSetting = settingCookie.GetClientTextViewSetting(client);
+		bool viewSetting = TTSettingCookie.GetClientTextViewSetting(client);
 
 		switch(rule)
 		{

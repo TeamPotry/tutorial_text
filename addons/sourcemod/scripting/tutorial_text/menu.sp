@@ -73,11 +73,10 @@ void DisplayTextSettingMenu(int client)
     SetGlobalTransTarget(client);
 
     Menu menu = new Menu(OnTextSettingMenu);
-    TTSettingCookie settingCookie = new TTSettingCookie();
 
     menu.SetTitle("%t", "menu_cached_id_message_title");
 
-    menu.AddItem("", settingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
+    menu.AddItem("", TTSettingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
 
     menu.ExitButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
@@ -95,11 +94,10 @@ public int OnTextSettingMenu(Menu menu, MenuAction action, int client, int item)
         }
         case MenuAction_Select:
         {
-            TTSettingCookie settingCookie = new TTSettingCookie();
             SetGlobalTransTarget(client);
 
-            settingCookie.SetClientTextViewSetting(client, !settingCookie.GetClientTextViewSetting(client));
-            CPrintToChat(client, "{orangered}[TT]{default} %t", "now_set_done", settingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
+            TTSettingCookie.SetClientTextViewSetting(client, !TTSettingCookie.GetClientTextViewSetting(client));
+            CPrintToChat(client, "{orangered}[TT]{default} %t", "now_set_done", TTSettingCookie.GetClientTextViewSetting(client) ? "ON" : "OFF");
             SetGlobalTransTarget(LANG_SERVER);
         }
     }
