@@ -6,6 +6,8 @@ void Native_Init()
     CreateNative("TTSettingCookie.GetTTSettingCookie", Native_TTSettingCookie_GetTTSettingCookie);
     CreateNative("TTSettingCookie.GetClientTextViewSetting", Native_TTSettingCookie_GetClientTextViewSetting);
     CreateNative("TTSettingCookie.SetClientTextViewSetting", Native_TTSettingCookie_SetClientTextViewSetting);
+
+    CreateNative("TTextKeyValue.GetValue", Native_TTextKeyValue_GetValue);
 }
 
 public int Native_LoadMessageID(Handle plugin, int numParams)
@@ -49,4 +51,58 @@ public int Native_TTSettingCookie_SetClientTextViewSetting(Handle plugin, int nu
 
     Format(temp, sizeof(temp), "%s", setting ? "1" : "0");
     SetClientCookie(client, settingCookie, temp);
+}
+
+public int Native_TTextKeyValue_GetValue(Handle plugin, int numParams)
+{
+    TTextKeyValue kv = GetNativeCell(1);
+    int buffer = GetNativeCell(5);
+    int client = GetNativeCell(6);
+
+    char messageId[80], key[80], langId[4], text[256];
+    GetNativeString(2, messageId, sizeof(messageId));
+    GetNativeString(3, key, sizeof(key));
+
+    if(client > 0 && IsClientInGame(client))
+        GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
+    else
+        Format(langId, sizeof(langId), "en");
+
+    TTextKeyValue cloned = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
+
+    if(messageId[0] != '\0')
+    {
+        int id;
+
+        kv.GetSectionSymbol(id);
+        kv.Rewind();
+
+        cloned.Import(kv);
+
+        kv.JumpToKeySymbol(id);
+
+        if(!cloned.JumpToKey(key))
+        {
+            LogError("[TT] not found keyName in config ''%s''", messageId);
+            delete cloned;
+            return false;
+        }
+    }
+    else {
+        cloned.Import(kv);
+    }
+
+    if(!StrEqual(langId, "en"))
+    {
+        if(!cloned.JumpToKey(langId))
+        {
+            LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
+            // 이 경우에는 그냥 영어로 변경.
+        }
+    }
+
+    cloned.GetString(key, text, buffer);
+    delete cloned;
+
+    return true;
 }

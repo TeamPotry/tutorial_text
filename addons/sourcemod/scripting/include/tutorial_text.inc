@@ -48,53 +48,7 @@ methodmap TTextKeyValue < KeyValues {
 		return keyValue;
 	}
 
-	public bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0)
-	{
-		char langId[4];
-
-		if(client > 0 && IsClientInGame(client))
-		    GetLanguageInfo(GetClientLanguage(client), langId, sizeof(langId));
-		else
-		    Format(langId, sizeof(langId), "en");
-
-		TTextKeyValue cloned = view_as<TTextKeyValue>(new KeyValues("tutorial_text"));
-
-		if(messageId[0] != '\0')
-		{
-			int id;
-
-			this.GetSectionSymbol(id);
-			this.Rewind();
-
-			cloned.Import(this);
-
-			this.JumpToKeySymbol(id);
-
-			if(!cloned.JumpToKey(key))
-			{
-				LogError("[TT] not found keyName in config ''%s''", messageId);
-				delete cloned;
-				return false;
-			}
-		}
-		else {
-			cloned.Import(this);
-		}
-
-		if(!StrEqual(langId, "en"))
-		{
-		    if(!cloned.JumpToKey(langId))
-		    {
-		        LogError("[TT] not found languageId in ''%s'' ''%s''", messageId, langId);
-		        // 이 경우에는 그냥 영어로 변경.
-		    }
-		}
-
-		cloned.GetString(key, value, buffer);
-		delete cloned;
-
-		return true;
-	}
+	public native bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0);
 }
 
 methodmap TTCookie < Handle {
