@@ -52,77 +52,13 @@ methodmap TTextKeyValue < KeyValues {
 }
 
 methodmap TTCookie < Handle {
-	public TTCookie(const char[] filename, const char[] messageId) {
-		char temp[80];
-		Format(temp, sizeof(temp), "tutorial_text_id:%s_%s", filename, messageId);
-		return view_as<TTCookie>(FindCookieEx(temp));
-	}
+	public static native Handle GetTTCookie(const char[] filename, const char[] messageId);
 
-	public bool GetClientViewed(const int client)
-	{
-		char temp[2];
-		GetClientCookie(client, this, temp, sizeof(temp));
-		return StringToInt(temp) > 0;
-	}
+	public static native bool GetClientViewed(const int client, const char[] filename, const char[] messageId);
 
-	public void SetClientViewed(const int client, bool value)
-	{
-		char temp[2];
-		Format(temp, sizeof(temp), "%s", value ? "1" : "0");
-		SetClientCookie(client, this, temp);
-	}
+	public static native void SetClientViewed(const int client, const char[] filename, const char[] messageId, bool value);
 
-	public bool CheckRuleForClient(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
-	{
-		char temp[80];
-		ShowMessageCookieRule rule;
-
-		if(customCookieRule != Type_None) {
-			rule = customCookieRule;
-		}
-		else {
-			TTextKeyValue kv = new TTextKeyValue(filename);
-			kv.GetValue(messageId, "cookie_rule", temp, sizeof(temp));
-			rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
-			delete kv;
-		}
-
-		GetClientCookie(client, this, temp, sizeof(temp));
-		bool firstViewed = StringToInt(temp) > 0;
-		bool viewSetting = TTSettingCookie.GetClientTextViewSetting(client);
-
-		switch(rule)
-		{
-		    case Type_Normal:
-		    {
-		        if(!viewSetting)
-		        {
-		            if(!firstViewed)
-		                return true;
-		            return false;
-		        }
-		    }
-
-		    case Type_OnlyOne:
-		    {
-		        if(firstViewed)
-		            return true;
-		        return false;
-		    }
-
-		    case Type_EveryTime:
-		    {
-		        return true;
-		    }
-
-		    case Type_NormalEvenFirst:
-		    {
-		        return viewSetting;
-		    }
-		}
-
-		return true;
-	}
+	public static native bool CheckRuleForClient(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None);
 }
 
 methodmap TTextEvent < TFAnnotationEvent {
@@ -195,22 +131,19 @@ methodmap TTextEvent < TFAnnotationEvent {
 		This function will fire annotation after rule checking.
 		And it will set Viewed Cookie.
 		*/
-		TTCookie cookie = new TTCookie(filename, messageId);
 		TTextKeyValue tempKeyValues = null;
 
-		if(IsFakeClient(client) || !cookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
+		if(IsFakeClient(client) || !TTCookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
 		{
-			delete cookie;
 			delete tempKeyValues;
 
 			return false;
 		}
 
 		this.VisibilityBits = (1 << client);
-		cookie.SetClientViewed(client, true);
+		TTCookie.SetClientViewed(client, filename, messageId, true);
 
 		this.Fire();
-		delete cookie;
 		delete tempKeyValues;
 
 		return true;
