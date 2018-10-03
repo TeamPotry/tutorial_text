@@ -21,7 +21,7 @@ public Action Cmd_TestTest(int client, int args)
 {
 	if(client > 0 && IsClientInGame(client))
 	{
-		TTextEvent event = new TTextEvent();
+		TTextEvent event = TTextEvent.InitTTextEvent();
 		float position[3];
 
 		TT_LoadMessageID(event, "the_test_text.cfg", "this_is_text_text");
@@ -40,7 +40,7 @@ public Action Cmd_NumTest(int client, int args)
 {
 	if(client > 0 && IsClientInGame(client))
 	{
-		TTextEvent event = new TTextEvent();
+		TTextEvent event = TTextEvent.InitTTextEvent();
 		float position[3];
 
 		TT_LoadMessageID(event, "the_test_text.cfg", "this_is_9");

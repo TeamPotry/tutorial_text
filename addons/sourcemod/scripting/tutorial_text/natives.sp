@@ -13,6 +13,7 @@ void Native_Init()
     CreateNative("TTCookie.GetClientViewed", Native_TTCookie_GetClientViewed);
     CreateNative("TTCookie.SetClientViewed", Native_TTCookie_SetClientViewed);
     CreateNative("TTCookie.CheckRuleForClient", Native_TTCookie_CheckRuleForClient);
+    CreateNative("TTextEvent.InitTTextEvent", Native_TTextEvent_InitTTextEvent);
 }
 
 public int Native_LoadMessageID(Handle plugin, int numParams)
@@ -197,4 +198,9 @@ public int Native_TTCookie_CheckRuleForClient(Handle plugin, int numParams)
     }
 
     return true;
+}
+
+public int Native_TTextEvent_InitTTextEvent(Handle plugin, int numParams)
+{
+    return view_as<int>(new TFAnnotationEvent());
 }

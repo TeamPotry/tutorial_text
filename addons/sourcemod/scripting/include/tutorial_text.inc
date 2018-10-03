@@ -62,10 +62,6 @@ methodmap TTCookie < Handle {
 }
 
 methodmap TTextEvent < TFAnnotationEvent {
-	public TTextEvent() {
-		return view_as<TTextEvent>(new TFAnnotationEvent());
-	}
-
 	public void ChangeTextLanguage(const char[] filename = "", const char[] messageId, const int client, ArrayList parameterArray = null) // FIXME: How about any ... ?
 	{
 		if(!IsClientInGame(client) || IsFakeClient(client)) return;
