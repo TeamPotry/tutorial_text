@@ -128,7 +128,7 @@ stock void CopyMessageEvent(TTextEvent event, TTextEvent victim)
 
     return;
 }
-/*
+
 public SharedPlugin __pl_tutorial_text=
 {
 	name="tutorial_text",
@@ -147,4 +147,3 @@ public __pl_tutorial_text_SetNTVOptional()
 	MarkNativeAsOptional("TT_FireTutorialText");
 }
 #endif
-*/
