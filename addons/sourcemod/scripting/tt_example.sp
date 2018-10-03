@@ -28,9 +28,8 @@ public Action Cmd_TestTest(int client, int args)
 		GetClientEyePosition(client, position);
 		event.SetPosition(position);
 
-		event.FireTutorialTextAll("the_test_text.cfg", "this_is_text_text");
-
-		// delete event;
+		event.ChangeTextLanguage("the_test_text.cfg", "this_is_text_text", client);
+		event.FireTutorialText("the_test_text.cfg", "this_is_text_text", client);
 	}
 
 	return Plugin_Continue;
@@ -47,13 +46,8 @@ public Action Cmd_NumTest(int client, int args)
 		GetClientEyePosition(client, position);
 		event.SetPosition(position);
 
-		ArrayList messagePara = new ArrayList();
-		messagePara.Push(9);
-
-		event.FireTutorialTextAll("the_test_text.cfg", "this_is_9", messagePara);
-
-		delete messagePara;
-		// delete event;
+		event.ChangeTextLanguage("the_test_text.cfg", "this_is_9", client, 9);
+		event.FireTutorialText("the_test_text.cfg", "this_is_9", client);
 	}
 
 	return Plugin_Continue;

@@ -62,105 +62,13 @@ methodmap TTCookie < Handle {
 }
 
 methodmap TTextEvent < TFAnnotationEvent {
-	public void ChangeTextLanguage(const char[] filename = "", const char[] messageId, const int client, ArrayList parameterArray = null) // FIXME: How about any ... ?
-	{
-		if(!IsClientInGame(client) || IsFakeClient(client)) return;
+	public static native TTextEvent InitTTextEvent();
 
-		TTextKeyValue temp = new TTextKeyValue(filename);
-		char text[255], formattingStyle[128], tempNumberStr[8];
-		int formatCount = 0;
+	public native void ChangeTextLanguage(const char[] filename = "", const char[] messageId, const int client, any ...);
 
-		temp.GetValue(messageId, "text", text, sizeof(text), client);
-		temp.GetValue(messageId, "#format", formattingStyle, sizeof(formattingStyle));
+	public native bool FireTutorialText(const char[] filename = "", const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None);
 
-		for(int loop = 0; ; loop++) // 포맷 카운트 확보
-		{
-			Format(tempNumberStr, sizeof(tempNumberStr), "%i", loop + 1);
-			if(StrContains(formattingStyle, tempNumberStr) == -1)
-				break;
-
-			formatCount++;
-		}
-
-		if(formatCount > 0 && formatCount < 16)
-		{
-			if(parameterArray == null || formatCount != parameterArray.Length)
-			{
-				ThrowError("#format key is exist. But parameterArray doesn't match! (%d / %d)", parameterArray == null ? 0 : parameterArray.Length, formatCount);
-			}
-
-			char formatting[16][8];
-			char tempString[255];
-
-			if(ExplodeString(formattingStyle, ",", formatting, 16, 8) <= 0)
-				strcopy(formatting[0], sizeof(formatting[]), formattingStyle);
-
-			for(int loop = 1; loop <= formatCount; loop++)
-			{
-				int seIndex = FindCharInString(formatting[loop - 1], ':');
-				// 포맷 스타일 확보
-				if(formatting[loop][seIndex + 1] == 's') // 문자열
-				{
-					parameterArray.GetString(loop - 1, tempString, sizeof(tempString));
-				}
-				else
-				{
-					char tempItem[2];
-					tempItem[0] = '%';
-					tempItem[1] = formatting[loop - 1][seIndex + 1];
-
-					Format(tempString, sizeof(tempString), tempItem, parameterArray.Get(loop - 1));
-				}
-				Format(tempNumberStr, sizeof(tempNumberStr), "{%i}", loop);
-				ReplaceString(text, sizeof(text), tempNumberStr, tempString);
-			}
-		}
-
-		delete temp;
-
-		this.SetText(text);
-	}
-
-	public bool FireTutorialText(const char[] filename = "", const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None)
-	{
-		/*
-		This function will fire annotation after rule checking.
-		And it will set Viewed Cookie.
-		*/
-		TTextKeyValue tempKeyValues = null;
-
-		if(IsFakeClient(client) || !TTCookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
-		{
-			delete tempKeyValues;
-
-			return false;
-		}
-
-		this.VisibilityBits = (1 << client);
-		TTCookie.SetClientViewed(client, filename, messageId, true);
-
-		this.Fire();
-		delete tempKeyValues;
-
-		return true;
-	}
-
-	public void FireTutorialTextAll(const char[] filename = "", const char[] messageId, ArrayList parameterArray = null, const ShowMessageCookieRule customCookieRule = Type_None)
-	{
-		TTextEvent tempEvent;
-		for(int target = 1; target <= MaxClients; target++)
-		{
-			if(!IsClientInGame(target) || IsFakeClient(target)) continue;
-
-			tempEvent = new TTextEvent();
-			CopyMessageEvent(this, tempEvent);
-
-			tempEvent.ChangeTextLanguage(filename, messageId, target, parameterArray);
-			tempEvent.FireTutorialText(filename, messageId, target, customCookieRule);
-		}
-
-		this.Cancel();
-	}
+	// public native void FireTutorialTextAll(const char[] filename = "", const char[] messageId, const ShowMessageCookieRule customCookieRule = Type_None, any ...);
 }
 
 /*
