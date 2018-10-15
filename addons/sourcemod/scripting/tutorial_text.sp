@@ -66,10 +66,13 @@ void PrecacheTestConfig()
 
 			if(soundPath[0] == '\0') continue;
 
-			Format(path, sizeof(path), "sound/%s", soundPath);
-			if(!FileExists(path)) {
-				LogError("%t", "sound_not_found", soundPath);
-				continue;
+			if(testKv.GetNum("sound_download", 0) > 0)
+			{
+				Format(path, sizeof(path), "sound/%s", soundPath);
+				if(!FileExists(path)) {
+					LogError("%t", "sound_not_found", soundPath);
+					continue;
+				}
 			}
 
 			if(!IsSoundPrecached(soundPath))
