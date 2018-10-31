@@ -1,0 +1,1 @@
+TTDBData g_DBData;

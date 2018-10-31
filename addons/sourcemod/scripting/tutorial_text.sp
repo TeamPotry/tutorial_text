@@ -5,6 +5,9 @@
 #include <sdktools>
 #include <sdkhooks>
 
+#include "tutorial_text/database.sp"
+#include "tutorial_text/global_var.sp"
+
 #include "tutorial_text/commands.sp"
 #include "tutorial_text/stocks.sp"
 #include "tutorial_text/menu.sp"
@@ -22,6 +25,9 @@ public Plugin myinfo =
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	Native_Init();
+
+	// tutorial_text/database.sp
+	DB_Native_Init();
 }
 
 public void OnPluginStart()
@@ -40,6 +46,8 @@ public void OnMapStart()
 {
 	PrecacheTestConfig();
 	PrecacheAllText();
+
+	g_DBData = new TTDBData();
 }
 
 void PrecacheTestConfig()

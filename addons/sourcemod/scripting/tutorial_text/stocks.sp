@@ -1,3 +1,57 @@
+bool CheckTextRule(char[] filename, char[] messageId, int client, ShowMessageCookieRule customCookieRule = Type_None)
+{
+    char temp[80], authId[25];
+    ShowMessageCookieRule rule;
+    GetClientAuthId(client, AuthId_SteamID64, authId, 25);
+
+    if(customCookieRule != Type_None) {
+        rule = customCookieRule;
+    }
+    else {
+        TTextKeyValue kv = new TTextKeyValue(filename);
+        kv.GetValue(messageId, "cookie_rule", temp, sizeof(temp));
+        rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
+        delete kv;
+    }
+
+    bool firstViewed = g_DBData.GetMessageView(authId, messageId);
+    bool viewSetting = TTSettingCookie.GetClientTextViewSetting(client);
+
+    // CPrintToChatAll("firstViewed: %s, viewSetting: %s", firstViewed ? "true" : "false", viewSetting ? "true" : "false");
+
+    switch(rule)
+    {
+        case Type_Normal:
+        {
+            if(!viewSetting)
+            {
+                if(!firstViewed)
+                    return true;
+                return false;
+            }
+        }
+
+        case Type_OnlyOne:
+        {
+            if(firstViewed)
+                return false;
+            return true;
+        }
+
+        case Type_EveryTime:
+        {
+            return true;
+        }
+
+        case Type_NormalEvenFirst:
+        {
+            return viewSetting;
+        }
+    }
+
+    return true;
+}
+
 stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageId)
 {
     char values[PLATFORM_MAX_PATH];

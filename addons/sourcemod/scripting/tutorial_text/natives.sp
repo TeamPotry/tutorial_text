@@ -9,11 +9,6 @@ void Native_Init()
 
     CreateNative("TTextKeyValue.GetValue", Native_TTextKeyValue_GetValue);
 
-    CreateNative("TTCookie.GetTTCookie", Native_TTCookie_GetTTCookie);
-    CreateNative("TTCookie.GetClientViewed", Native_TTCookie_GetClientViewed);
-    CreateNative("TTCookie.SetClientViewed", Native_TTCookie_SetClientViewed);
-    CreateNative("TTCookie.CheckRuleForClient", Native_TTCookie_CheckRuleForClient);
-
     CreateNative("TTextEvent.InitTTextEvent", Native_TTextEvent_InitTTextEvent);
     CreateNative("TTextEvent.ChangeTextLanguage", Native_TTextEvent_ChangeTextLanguage);
     CreateNative("TTextEvent.FireTutorialText", Native_TTextEvent_FireTutorialText);
@@ -108,93 +103,6 @@ public int Native_TTextKeyValue_GetValue(Handle plugin, int numParams)
     return true;
 }
 
-public int Native_TTCookie_GetTTCookie(Handle plugin, int numParams)
-{
-    char temp[80], filename[PLATFORM_MAX_PATH], messageId[80];
-    GetNativeString(1, filename, sizeof(filename));
-    GetNativeString(2, messageId, sizeof(messageId));
-    Format(temp, sizeof(temp), "tutorial_text_id:%s_%s", filename, messageId);
-    return view_as<int>(FindCookieEx(temp));
-}
-
-public int Native_TTCookie_GetClientViewed(Handle plugin, int numParams)
-{
-    char temp[2], filename[PLATFORM_MAX_PATH], messageId[80];
-    GetNativeString(2, filename, sizeof(filename));
-    GetNativeString(3, messageId, sizeof(messageId));
-    Handle cookie = TTCookie.GetTTCookie(filename, messageId);
-
-    GetClientCookie(GetNativeCell(1), cookie, temp, sizeof(temp));
-    return StringToInt(temp) > 0;
-}
-
-public int Native_TTCookie_SetClientViewed(Handle plugin, int numParams)
-{
-    char temp[2], filename[PLATFORM_MAX_PATH], messageId[80];
-    GetNativeString(2, filename, sizeof(filename));
-    GetNativeString(3, messageId, sizeof(messageId));
-    Handle cookie = TTCookie.GetTTCookie(filename, messageId);
-
-    Format(temp, sizeof(temp), "%s", GetNativeCell(4) ? "1" : "0");
-    SetClientCookie(GetNativeCell(1), cookie, temp);
-}
-
-public int Native_TTCookie_CheckRuleForClient(Handle plugin, int numParams)
-{
-    char temp[80], filename[PLATFORM_MAX_PATH], messageId[80];
-    GetNativeString(1, filename, sizeof(filename));
-    GetNativeString(2, messageId, sizeof(messageId));
-    int client = GetNativeCell(3);
-    ShowMessageCookieRule customCookieRule = GetNativeCell(4);
-
-    ShowMessageCookieRule rule;
-
-    if(customCookieRule != Type_None) {
-        rule = customCookieRule;
-    }
-    else {
-        TTextKeyValue kv = new TTextKeyValue(filename);
-        kv.GetValue(messageId, "cookie_rule", temp, sizeof(temp));
-        rule = view_as<ShowMessageCookieRule>(StringToInt(temp));
-        delete kv;
-    }
-
-    bool firstViewed = TTCookie.GetClientViewed(client, filename, messageId);
-    bool viewSetting = TTSettingCookie.GetClientTextViewSetting(client);
-
-    switch(rule)
-    {
-        case Type_Normal:
-        {
-            if(!viewSetting)
-            {
-                if(!firstViewed)
-                    return true;
-                return false;
-            }
-        }
-
-        case Type_OnlyOne:
-        {
-            if(firstViewed)
-                return true;
-            return false;
-        }
-
-        case Type_EveryTime:
-        {
-            return true;
-        }
-
-        case Type_NormalEvenFirst:
-        {
-            return viewSetting;
-        }
-    }
-
-    return true;
-}
-
 public int Native_TTextEvent_InitTTextEvent(Handle plugin, int numParams)
 {
     return view_as<int>(new TFAnnotationEvent());
@@ -274,26 +182,22 @@ public int Native_TTextEvent_FireTutorialText(Handle plugin, int numParams)
     And it will set Viewed Cookie.
     */
     TTextEvent textKv = GetNativeCell(1);
-    char filename[PLATFORM_MAX_PATH], messageId[80];
+    char filename[PLATFORM_MAX_PATH], messageId[80], authId[25];
     GetNativeString(2, filename, sizeof(filename));
     GetNativeString(3, messageId, sizeof(messageId));
     int client = GetNativeCell(4);
     ShowMessageCookieRule customCookieRule = GetNativeCell(5);
-    TTextKeyValue tempKeyValues = null;
 
-    if(IsFakeClient(client) || !TTCookie.CheckRuleForClient(filename, messageId, client, customCookieRule))
+    if(IsFakeClient(client) || !CheckTextRule(filename, messageId, client, customCookieRule))
     {
-        delete tempKeyValues;
-
         return false;
     }
 
     textKv.VisibilityBits = (1 << client);
-    TTCookie.SetClientViewed(client, filename, messageId, true);
+    GetClientAuthId(client, AuthId_SteamID64, authId, 25);
+    g_DBData.SetMessageView(authId, messageId, true);
 
     textKv.Fire();
-    delete tempKeyValues;
-
     return true;
 }
 /*

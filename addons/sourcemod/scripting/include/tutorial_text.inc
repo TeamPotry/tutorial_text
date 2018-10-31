@@ -51,16 +51,6 @@ methodmap TTextKeyValue < KeyValues {
 	public native bool GetValue(const char[] messageId, const char[] key, char[] value, const int buffer, const int client = 0);
 }
 
-methodmap TTCookie < Handle {
-	public static native Handle GetTTCookie(const char[] filename, const char[] messageId);
-
-	public static native bool GetClientViewed(const int client, const char[] filename, const char[] messageId);
-
-	public static native void SetClientViewed(const int client, const char[] filename, const char[] messageId, bool value);
-
-	public static native bool CheckRuleForClient(const char[] filename, const char[] messageId, const int client, const ShowMessageCookieRule customCookieRule = Type_None);
-}
-
 methodmap TTextEvent < TFAnnotationEvent {
 	public static native TTextEvent InitTTextEvent();
 
