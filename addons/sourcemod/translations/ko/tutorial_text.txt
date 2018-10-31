@@ -24,7 +24,7 @@
 
     "menu_cached_id_message_setting_title"
     {
-        "ko"        "텍스트 보기 설정 (ON / OFF)"
+        "ko"        "텍스트 보기 설정 (ON / OFF)\n - OFF(끄기): 서버에 대한 힌트 메시지를 받지 않습니다."
     }
 
 //    "setting_show_text"
