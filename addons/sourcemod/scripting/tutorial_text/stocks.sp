@@ -63,22 +63,26 @@ stock bool LoadMessageID(TTextEvent event, char[] filename = "", char[] messageI
         return false;
     }
 
-    temp.GetValue(messageId, "show_effect", values, sizeof(values));
-    event.ShowEffect = StringToInt(values) > 0 ? true : false;
+    if(temp.JumpToKey(messageId))
+    {
+        temp.Rewind();
+        
+        temp.GetValue(messageId, "show_effect", values, sizeof(values));
+        event.ShowEffect = StringToInt(values) > 0 ? true : false;
 
-    temp.GetValue(messageId, "show_distance", values, sizeof(values));
-    event.ShowDistance = StringToInt(values) > 0 ? true : false;
+        temp.GetValue(messageId, "show_distance", values, sizeof(values));
+        event.ShowDistance = StringToInt(values) > 0 ? true : false;
 
-    temp.GetValue(messageId, "id", values, sizeof(values));
-    event.ID = StringToInt(values);
+        temp.GetValue(messageId, "id", values, sizeof(values));
+        event.ID = StringToInt(values);
 
-    temp.GetValue(messageId, "play_sound", values, sizeof(values));
-    event.SetSound(values);
+        temp.GetValue(messageId, "play_sound", values, sizeof(values));
+        event.SetSound(values);
 
-    event.SetText(messageId);
+        event.SetText(messageId);
+    }
 
     delete temp;
-
     return true;
 }
 
