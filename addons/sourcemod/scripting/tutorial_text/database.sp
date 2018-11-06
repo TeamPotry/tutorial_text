@@ -5,8 +5,7 @@ methodmap TTDBData < Database {
     {
         Database database;
         DBDriver driver;
-        char driverString[10];
-        char errorMessage[64];
+        char driverString[10], errorMessage[256];
 
         database = SQL_Connect(TT_CONFIG_NAME, true, errorMessage, sizeof(errorMessage));
         if(database == null)
