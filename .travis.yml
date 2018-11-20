@@ -20,7 +20,7 @@ before_script:
     # - wget "https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc" -O include/updater.inc
 
     - chmod +x spcomp
-script: ./compile.sh tutorial_text.sp
+script: ./compile.sh tutorial_text.sp tt_example.sp
 
 # Notifications
 notifications:
