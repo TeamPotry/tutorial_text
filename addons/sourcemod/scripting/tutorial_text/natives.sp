@@ -195,7 +195,7 @@ public int Native_TTextEvent_FireTutorialText(Handle plugin, int numParams)
 
     textKv.VisibilityBits = (1 << client);
     GetClientAuthId(client, AuthId_SteamID64, authId, 25);
-    g_DBData.SetMessageView(authId, messageId, true);
+    LoadedPlayerData[client].SetMessageView(messageId, true);
 
     textKv.Fire();
     return true;

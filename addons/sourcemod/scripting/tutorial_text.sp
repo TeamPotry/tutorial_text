@@ -16,9 +16,9 @@
 public Plugin myinfo =
 {
 	name = "[TF2] Tutorial Text",
-	author = "Nopied v2.0",
+	author = "Nopied",
 	description = "This will help server noobs.",
-	version = "0.9",
+	version = "0.91",
 	url = "https://github.com/TeamPotry/tutorial_text"
 };
 
@@ -28,6 +28,9 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 	// tutorial_text/database.sp
 	DB_Native_Init();
+
+	// tutorial_text/global_var.sp
+	Data_Native_Init();
 }
 
 public void OnPluginStart()
@@ -48,6 +51,21 @@ public void OnMapStart()
 	PrecacheAllText();
 
 	g_DBData = new TTDBData();
+}
+
+public void OnClientAuthorized(int client, const char[] auth)
+{
+	if(IsFakeClient(client))	return;
+
+	LoadedPlayerData[client] = new TTPlayerData(client);
+}
+
+public void OnClientDisconnect(int client)
+{
+	if(IsFakeClient(client))	return;
+
+	LoadedPlayerData[client].Update();
+	delete LoadedPlayerData[client];
 }
 
 void PrecacheTestConfig()

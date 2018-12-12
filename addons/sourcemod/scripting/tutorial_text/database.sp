@@ -39,7 +39,7 @@ public void QueryErrorCheck(Database db, DBResultSet results, const char[] error
 {
     if(results == null || error[0] != '\0')
     {
-        SetFailState("Ahh.. Something is wrong in QueryErrorCheck. check your DB. ERROR: %s", error);
+        LogError("Ahh.. Something is wrong in QueryErrorCheck. check your DB. ERROR: %s", error);
     }
 }
 
@@ -92,5 +92,5 @@ public int Native_TTDBData_SetMessageView(Handle plugin, int numParams)
         Format(queryStr, sizeof(queryStr), "DELETE FROM `tutorial_text_view` WHERE `steam_id` = '%s' AND `message_id` = '%s'", authId, messageId);
     }
 
-    thisDB.Query(QueryErrorCheck, queryStr);
+    SQL_FastQuery(thisDB, queryStr, strlen(queryStr)+1);
 }

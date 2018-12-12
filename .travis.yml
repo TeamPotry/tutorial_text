@@ -17,8 +17,6 @@ install:
     - tar -xzf $(cat sourcemod-latest-linux)
 before_script:
     - cd addons/sourcemod/scripting/
-    # - wget "https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc" -O include/updater.inc
-
     - chmod +x spcomp
 script: ./compile.sh tutorial_text.sp tt_example.sp
 
