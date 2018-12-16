@@ -78,9 +78,7 @@ void PrecacheTestConfig()
 		return;
     }
 
-	char messageId[64];
-	char path[PLATFORM_MAX_PATH];
-	char soundPath[PLATFORM_MAX_PATH];
+	char messageId[64], path[PLATFORM_MAX_PATH], soundPath[PLATFORM_MAX_PATH];
 	testKv.Rewind();
 
 	if(testKv.GotoFirstSubKey())
@@ -111,10 +109,7 @@ void PrecacheTestConfig()
 void PrecacheAllText()
 {
 	TTextKeyValue fileKv;
-	char path[PLATFORM_MAX_PATH];
-	char soundPath[PLATFORM_MAX_PATH];
-	char foldername[PLATFORM_MAX_PATH];
-	char filename[PLATFORM_MAX_PATH];
+	char path[PLATFORM_MAX_PATH], soundPath[PLATFORM_MAX_PATH], foldername[PLATFORM_MAX_PATH], filename[PLATFORM_MAX_PATH];
 
 	BuildPath(Path_SM, foldername, sizeof(foldername), "configs/tutorial_text");
 	Handle dir = OpenDirectory(foldername);
@@ -134,14 +129,18 @@ void PrecacheAllText()
 			{
 				do
 				{
+					fileKv.GetSectionName(messageId, sizeof(messageId));
 					fileKv.GetString("play_sound", soundPath, sizeof(soundPath));
 
 					if(soundPath[0] == '\0') continue;
 
-					Format(path, sizeof(path), "sound/%s", soundPath);
-					if(!FileExists(path)) {
-						LogError("%t", "sound_not_found", soundPath);
-						continue;
+					if(fileKv.GetNum("sound_download", 0) > 0)
+					{
+						Format(path, sizeof(path), "sound/%s", soundPath);
+						if(!FileExists(path)) {
+							LogError("%t", "sound_not_found", soundPath);
+							continue;
+						}
 					}
 
 					if(!IsSoundPrecached(soundPath))
