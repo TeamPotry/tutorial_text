@@ -109,7 +109,7 @@ void PrecacheTestConfig()
 void PrecacheAllText()
 {
 	TTextKeyValue fileKv;
-	char path[PLATFORM_MAX_PATH], soundPath[PLATFORM_MAX_PATH], foldername[PLATFORM_MAX_PATH], filename[PLATFORM_MAX_PATH];
+	char messageId[80], path[PLATFORM_MAX_PATH], soundPath[PLATFORM_MAX_PATH], foldername[PLATFORM_MAX_PATH], filename[PLATFORM_MAX_PATH];
 
 	BuildPath(Path_SM, foldername, sizeof(foldername), "configs/tutorial_text");
 	Handle dir = OpenDirectory(foldername);
